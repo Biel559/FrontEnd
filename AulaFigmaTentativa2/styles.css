@@ -1,0 +1,172 @@
+/* styles.css */
+
+.section-wrapper {
+     background-color: rgba(101, 31, 113, 1);
+     display: flex;
+     flex-direction: column;
+     overflow: hidden;
+     align-items: center;
+     color: rgba(255, 255, 255, 1);
+     padding: 45px 80px 133px;
+   }
+   
+   @media (max-width: 991px) {
+     .section-wrapper {
+       padding: 0 20px 100px;
+     }
+   }
+   
+   .container {
+     display: flex;
+     margin-left: 24px;
+     width: 715px;
+     max-width: 100%;
+     flex-direction: column;
+   }
+   
+   .heading-wrapper {
+     display: flex;
+     flex-direction: column;
+     align-items: center;
+     font-size: 96px;
+     padding: 0 70px 0 22px;
+   }
+   
+   @media (max-width: 991px) {
+     .heading-wrapper {
+       max-width: 100%;
+       font-size: 40px;
+       padding: 0 20px;
+     }
+   }
+   
+   .welcome-text {
+     font-family: Inika, sans-serif;
+     font-weight: 700;
+   }
+   
+   @media (max-width: 991px) {
+     .welcome-text {
+       max-width: 100%;
+       font-size: 40px;
+     }
+   }
+   
+   .image {
+     aspect-ratio: 0.93;
+     object-fit: contain;
+     object-position: center;
+     width: 450px;
+     margin-top: 124px;
+     max-width: 100%;
+   }
+   
+   @media (max-width: 991px) {
+     .image {
+       margin-top: 40px;
+     }
+   }
+   
+   .title {
+     text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+     font-family: Irish Grover, sans-serif;
+     font-weight: 400;
+     align-self: stretch;
+     margin-top: 50px;
+   }
+   
+   @media (max-width: 991px) {
+     .title {
+       max-width: 100%;
+       margin-top: 40px;
+       font-size: 40px;
+     }
+   }
+   
+   .form-label {
+     color: rgba(0, 0, 0, 1);
+     align-self: start;
+     margin-top: 17px;
+     font: 400 36px Inika, sans-serif;
+   }
+   
+   .form-input {
+     border-radius: 10px;
+     background-color: rgba(255, 255, 255, 1);
+     margin-top: 18px;
+     color: rgba(132, 131, 131, 1);
+     padding: 8px 22px;
+     font: 400 32px Inika, sans-serif;
+     border: 3px solid rgba(0, 0, 0, 1);
+   }
+   
+   @media (max-width: 991px) {
+     .form-input {
+       max-width: 100%;
+       padding: 0 20px;
+     }
+   }
+   
+   .form-password-label {
+     color: rgba(0, 0, 0, 1);
+     align-self: start;
+     margin-top: 28px;
+     font: 400 36px Inika, sans-serif;
+   }
+   
+   .form-password-input {
+     border-radius: 10px;
+     background-color: rgba(255, 255, 255, 1);
+     margin-top: 18px;
+     color: rgba(132, 131, 131, 1);
+     padding: 8px 22px;
+     font: 400 32px Inika, sans-serif;
+     border: 3px solid rgba(0, 0, 0, 1);
+   }
+   
+   @media (max-width: 991px) {
+     .form-password-input {
+       max-width: 100%;
+       padding: 0 20px;
+     }
+   }
+   
+   .form-actions {
+     display: flex;
+     margin-top: 16px;
+     align-items: start;
+     gap: 20px;
+     font-family: Inika, sans-serif;
+     flex-wrap: wrap;
+     justify-content: space-between;
+   }
+   
+   @media (max-width: 991px) {
+     .form-actions {
+       max-width: 100%;
+     }
+   }
+   
+   .form-create-account {
+     font-size: 24px;
+     font-weight: 400;
+   }
+   
+   .form-login {
+     border-radius: 20px;
+     background-color: rgba(104, 178, 248, 1);
+     margin-top: 16px;
+     font-size: 36px;
+     font-weight: 700;
+     white-space: nowrap;
+     padding: 12px 70px;
+     border: 5px solid rgba(0, 0, 0, 1);
+   }
+   
+   @media (max-width: 991px) {
+     .form-login {
+       white-space: initial;
+       padding: 0 20px;
+     }
+   }
+   

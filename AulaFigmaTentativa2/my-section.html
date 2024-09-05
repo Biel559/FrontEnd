@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login Page</title>
+    <link href="https://fonts.googleapis.com/css?family=Irish+Grover&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css?family=Inika&display=swap" rel="stylesheet" />
+    <link href="styles.css" rel="stylesheet" />
+</head>
+<body>
+    <section class="section-wrapper">
+        <div class="container">
+            <div class="heading-wrapper">
+                <h1 class="welcome-text">Welcome!</h1>
+                <img
+                    loading="lazy"
+                    src="https://cdn.builder.io/api/v1/image/assets/TEMP/b2a7b7378e981c4ba953716f2cebfeebe1b6133cd8d318a2d20cd502e1c237e9?placeholderIfAbsent=true&apiKey=da13e27a3be14aea8e2316a28cd5fcfe"
+                    alt="Illustration of books"
+                    class="image"
+                />
+                <h2 class="title">Illumine Books</h2>
+            </div>
+            <form>
+                <label for="nicknameInput" class="form-label">Login:</label>
+                <br>
+                <input
+                    type="text"
+                    id="nicknameInput"
+                    class="form-input"
+                    placeholder="Type your nickname"
+                    aria-label="Type your nickname"
+                />
+                <br><br>
+                <label for="passwordInput" class="form-password-label">Password:</label>
+                <br>
+                <input
+                    type="password"
+                    id="passwordInput"
+                    class="form-password-input"
+                    placeholder="Type your password"
+                    aria-label="Type your password"
+                />
+                <div class="form-actions">
+                    <button class="form-create-account" type="button">
+                        Create Account...
+                    </button>
+                    <button class="form-login" type="submit">Login</button>
+                </div>
+            </form>
+        </div>
+    </section>
+</body>
+</html>
