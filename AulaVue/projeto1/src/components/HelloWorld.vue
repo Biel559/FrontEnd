@@ -13,6 +13,9 @@
     {{ item.text }}
    </li> 
   </ul>
+  <input v-model="nome2" placeholder="Digite seu nome">
+  <br>
+   <p>{{ mensagem2 }} {{ nome2 }}</p>
 
 </template>
 
@@ -33,6 +36,8 @@ export default {
         { text:"RB Bragantino"}
       ],
       nome: "Gabriel",
+      nome2: "",
+      mensagem2:'Bem vindo',
       texto: "Texto genéricão"
     };
   },
