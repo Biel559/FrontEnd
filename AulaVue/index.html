@@ -9,59 +9,77 @@
 <body>
 <div id="app">
     <p>{{ mensagem }}</p>
-  <p>Contador: {{ contador }}</p>
-  <p v-if="mostrar">Texto do Mostrar</p>
+    <p>Contador: {{ contador }}</p>
+    <p v-if="mostrar">Texto do Mostrar</p>
     <button @click="incrementar">Clique para incrementar</button>
     <button @click="reset">Reset</button>
     <button @click="mostrando">Mostrar/Ocultar</button>
     <input v-model="nome" placeholder="Digite seu nome">
     <br>
     <p>{{ texto }}</p>
-  <ul>
-   <li v-for="item in itens" :key="item.text">
-    {{ item.text }}
-   </li> 
-  </ul>
-  <input v-model="nome2" placeholder="Digite seu nome">
-  <br>
-   <p>{{ mensagem2 }} {{ nome2 }}</p>
-   </div>
-</body>
+    <ul>
+        <li v-for="item in itens" :key="item.text">{{ item.text }}</li>
+    </ul>
+    <p>Lista do usuário</p>
+    <input v-model="valorLista" type="text" placeholder="Adicionar à lista">
+    <button @click="addLista">Adicionar</button>
+    <button @click="removeLista">Remover o último</button>
+    <button @click="removeTudo">Remover toda a lista</button>
+    <ul>
+        <li v-for="(item, index) in listaFor" :key="index">{{ item.text }}</li>
+    </ul>
+    <input v-model="nome2" placeholder="Digite seu nome">
+    <br>
+    <p>{{ mensagem2 }} {{ nome2 }}</p>
+</div>
 <script>
 new Vue({
-            el: '#app',
-            data: {
-                mensagem: 'Bem-vindo ao Vue.js!',
-                contador: 0,
-                mostrar: false,
-                itens: [
-                    { text: 'Ponte Preta' },
-                    { text: 'Guarani' },
-                    { text: 'Novohorizontino' },
-                    { text: 'Ituano' },
-                    { text: 'Mirassol' },
-                    { text: 'RB Bragantino' }
-                ],
-                nome: 'Gabriel',
-                nome2: '',
-                mensagem2: 'Bem vindo',
-                texto: 'Texto genéricão'
-            },
-            methods: {
-                incrementar() {
-                    this.contador++;
-                },
-                reset() {
-                    this.contador = 0;
-                },
-                mostrando() {
-                    this.mostrar = !this.mostrar;
-                }
+    el: '#app',
+    data: {
+        mensagem: 'Bem-vindo ao Vue.js!',
+        contador: 0,
+        mostrar: false,
+        itens: [
+            { text: 'Ponte Preta' },
+            { text: 'Guarani' },
+            { text: 'Novohorizontino' },
+            { text: 'Ituano' },
+            { text: 'Mirassol' },
+            { text: 'RB Bragantino' }
+        ],
+        nome: 'Gabriel',
+        nome2: '',
+        valorLista: '',
+        listaFor: [],
+        mensagem2: 'Bem vindo',
+        texto: 'Texto genéricão'
+    },
+    methods: {
+        incrementar() {
+            this.contador++;
+        },
+        reset() {
+            this.contador = 0;
+        },
+        mostrando() {
+            this.mostrar = !this.mostrar;
+        },
+        addLista() {
+            if (this.valorLista) {
+                this.listaFor.push({ text: this.valorLista });
+                this.valorLista = '';
             }
-        });
+        },
+        removeLista() {
+            this.listaFor.pop()
+        },
+        removeTudo(){
+            this.listaFor = []
+        }
+    }
+});
 </script>
-<style scoped>
-
+<style>
 p {
   color: green;
 }
@@ -70,4 +88,5 @@ button {
   margin: 10px;
 }
 </style>
+</body>
 </html>
