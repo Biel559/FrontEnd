@@ -1,0 +1,2 @@
+gV0qyQD3WvOCWNmJ
+mongodb+srv://biel559cr:<db_password>@clustergabriel559.b0eqt.mongodb.net/
