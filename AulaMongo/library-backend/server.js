@@ -25,6 +25,6 @@ const booksRoutes = require("./routes/book");
 app.use("/api/books", booksRoutes);
 
 // Definir a porta do servidor
-app.listen(4000, () => {
+app.listen(3000, () => {
   console.log("Servidor rodando na porta 3000");
 });
