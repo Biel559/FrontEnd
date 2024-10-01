@@ -30,8 +30,8 @@ export default {
                });
           },
           editBook(book) {
-               console.log('Editando livro:', book); // Verifique se está sendo chamado
                this.$emit('edit-book', book);
+               console.log('Editando livro:', book); // Verifique se está sendo chamado
           },
      },
      mounted() {
@@ -39,3 +39,68 @@ export default {
      },
 };
 </script>
+
+<style scoped>
+@import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600&display=swap');
+
+span{
+     font-family: 'Nunito', sans-serif;
+}
+.book-list-container {
+  margin-top: 20px;
+}
+
+.book-list {
+  list-style: none;
+  padding: 0;
+}
+
+.book-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px;
+  border: 2px solid #090e0d;
+  border-radius: 5px;
+  margin-bottom: 10px;
+  background-color: #dae07d;
+  transition: background-color 0.3s;
+}
+
+.book-item:hover {
+  background-color: #a7ffeb;
+}
+
+.book-info {
+  font-family: 'Nunito', sans-serif; /* Aplica a fonte Nunito */
+}
+
+.edit-button, .delete-button {
+  padding: 10px 15px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-weight: bold;
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+.edit-button {
+  background-color: #00796b;
+  color: white;
+}
+
+.edit-button:hover {
+  background-color: #004d40;
+  transform: scale(1.05);
+}
+
+.delete-button {
+  background-color: #d32f2f;
+  color: white;
+}
+
+.delete-button:hover {
+  background-color: #b71c1c;
+  transform: scale(1.05);
+}
+</style>

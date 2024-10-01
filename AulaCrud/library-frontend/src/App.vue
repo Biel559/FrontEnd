@@ -1,26 +1,32 @@
 <template>
-  <img alt="Vue logo" src="./assets/logo.png">
-  <HelloWorld msg="Welcome to Your Vue.js App"/>
+  <div id="app">
+    <BookForm :bookToEdit="bookToEdit" @book-added="fetchBooks" @book-updated="fetchBooks" />
+    <BookList @edit-book="setBookToEdit" ref="bookList" />
+  </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+import BookList from './components/BookList.vue';
+import BookForm from './components/BookForm.vue';
 
 export default {
-  name: 'App',
+  data() {
+    return {
+      bookToEdit: null, // Estado do livro a ser editado
+    };
+  },
   components: {
-    HelloWorld
-  }
-}
+    BookList,
+    BookForm,
+  },
+  methods: {
+    setBookToEdit(book) {
+      this.bookToEdit = book; // Define o livro a ser editado
+    },
+    fetchBooks() {
+      this.$refs.bookList.fetchBooks(); // Atualiza a lista de livros
+      this.bookToEdit = null; // Limpa o formulário após a ação
+    },
+  },
+};
 </script>
-
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
-}
-</style>

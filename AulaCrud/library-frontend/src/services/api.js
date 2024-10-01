@@ -8,7 +8,7 @@ headers: {
      'Content-Type': 'application/json', // Define JSON como tipo de conteúdo
 },
 });
-
+ 
 // Exporta funções CRUD usando Axios
 export default {
 getBooks() {
