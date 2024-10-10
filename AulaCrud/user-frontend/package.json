@@ -10,6 +10,7 @@
   "dependencies": {
     "axios": "^1.7.7",
     "core-js": "^3.8.3",
+    "user-frontend": "file:",
     "vue": "^3.2.13",
     "vue-router": "^4.0.13"
   },
