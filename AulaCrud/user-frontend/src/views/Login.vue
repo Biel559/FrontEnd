@@ -149,8 +149,8 @@ form {
 
 .login-title-button {
   --border-right: 6px;
-  --text-stroke-color: rgba(0, 0, 0, 0.6);
-  --animation-color: #37FF8B;
+  --text-stroke-color: rgba(0, 0, 0);
+  --animation-color: #613c3c;
   --fs-size: 2em;
   letter-spacing: 3px;
   text-decoration: none;
