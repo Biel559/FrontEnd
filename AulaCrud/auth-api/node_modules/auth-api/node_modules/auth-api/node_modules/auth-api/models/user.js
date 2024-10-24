@@ -10,3 +10,4 @@ password: { type: String, required: true }, // Senha obrigatória
 // Exporta o modelo de usuário
 
 module.exports = mongoose.model('User', userSchema);
+ 
