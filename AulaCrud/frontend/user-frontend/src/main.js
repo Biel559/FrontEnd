@@ -1,5 +1,6 @@
 import { createApp } from 'vue'; // Importação para Vue 3
 import App from './App.vue';
+import './assets/dashboard.css'; // Importando o CSS global
 import router from './router';
 import api from './axios'; // Importa a configuração do Axios
 

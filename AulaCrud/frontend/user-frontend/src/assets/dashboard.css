@@ -1,0 +1,62 @@
+body {
+     margin: 0;
+     font-family: Arial, sans-serif;
+ }
+ 
+ .navbar {
+     display: flex;
+     align-items: center;
+     background-color: #651F71;
+     padding: 10px;
+     justify-content: space-between; /* Mantém espaço entre os itens */
+     position: fixed; /* Mantém a navbar fixa no topo */
+     top: 0; /* Posiciona a navbar no topo */
+     left: 0; /* Alinha à esquerda */
+     width: 99%; /* Faz a navbar ocupar toda a largura */
+     z-index: 1000; /* Garante que a navbar fique acima de outros elementos */
+ }
+ 
+ .search-bar {
+     flex-grow: 1; /* Faz a barra de busca ocupar o espaço restante */
+     display: flex; /* Para centralizar o input */
+     justify-content: center; /* Centraliza o input */
+ }
+ 
+ .search-bar input {
+    max-width: 400px; /* Aumente a largura máxima do input */
+    width: 100%; /* Faz o input ocupar 100% do espaço disponível */
+    padding: 12px; /* Aumenta o padding para um tamanho maior */
+    border: none;
+    border-radius: 4px;
+}
+
+ 
+ 
+ .logo img {
+     height: 80px; /* Ajuste conforme necessário */
+     margin-right: 0px;
+ }
+
+ .nav-icons {
+     display: flex;
+     margin-left: 0px; /* Adiciona espaço à esquerda dos ícones */
+ }
+ 
+ .nav-icons .icon {
+     color: white;
+     text-decoration: none;
+     margin-left: 55px; /* Reduz a margem entre os ícones */
+     font-size: 20px; /* Ajuste conforme necessário */
+     transition: color 0.3s;
+ }
+ 
+ .nav-icons img {
+    width: 64px; /* Ajuste conforme necessário */
+    height: 64px; /* Ajuste conforme necessário */
+}
+
+
+ .nav-icons .icon:hover {
+     color: #ff9800; /* Cor ao passar o mouse */
+ }
+ 
