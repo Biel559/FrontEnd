@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'; 
 import Login from '../views/Login.vue'; 
 import Dashboard from '../views/Dashboard.vue'; 
+import App from '../views/App.vue'; // Importa o componente App
 
 const routes = [
   {
@@ -13,6 +14,11 @@ const routes = [
     name: 'Dashboard',
     component: Dashboard,
     meta: { requiresAuth: true },
+  },
+  {
+    path: '/app', // Nova rota para App.vue
+    name: 'App',
+    component: App,
   },
   {
     path: '/:catchAll(.*)', // Usando a nova sintaxe para rotas coringa

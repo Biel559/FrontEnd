@@ -1,9 +1,9 @@
 <template>
   <div class="login">
-<button class="button login-title-button" data-text="Login">
-  <span class="actual-text">&nbsp;Login&nbsp;</span>
-  <span aria-hidden="true" class="hover-text">&nbsp;Login&nbsp;</span>
-</button>
+    <button class="button login-title-button" data-text="Login">
+      <span class="actual-text">&nbsp;Login&nbsp;</span>
+      <span aria-hidden="true" class="hover-text">&nbsp;Login&nbsp;</span>
+    </button>
 
     <form @submit.prevent="loginUser">
       <div class="container">
@@ -16,18 +16,20 @@
       </div>
       <button class="form-submit-button" type="submit">Logar</button>
     </form>
-    <p v-if="message">{{ message }}</p>
+    <p v-if="message">{{ message }}</p> <!-- Mensagem de erro ou sucesso -->
+    
+    <!-- Botão que redireciona para App.vue -->
+    <button @click="goToApp" class="form-redirect-button">crud</button>
   </div>
 </template>
 
-
 <script>
-import api from '../axios'; // Importa a configuração do Axios
+import api from '../axios';
 
 export default {
   data() {
     return {
-      username: '', // Alterado de 'email' para 'username'
+      username: '',
       password: '',
       message: ''
     };
@@ -40,17 +42,23 @@ export default {
           password: this.password,
         });
         this.message = 'Login bem-sucedido!';
-        localStorage.setItem('token', response.data.token); // Armazena o token JWT no localStorage
-        this.$router.push('/dashboard'); // Redireciona para a página principal após o login
+        localStorage.setItem('token', response.data.token);
+        this.$router.push('/dashboard');
       } catch (error) {
         this.message = error.response && error.response.data && error.response.data.message
           ? error.response.data.message
           : 'Erro ao fazer login.';
       }
+    },
+    // Método para redirecionar para App.vue
+    goToApp() {
+      this.$router.push('/app'); // Redireciona para a nova rota
     }
   }
 };
 </script>
+
+
 
 <style scoped>
 @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600&display=swap');
