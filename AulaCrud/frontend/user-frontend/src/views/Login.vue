@@ -15,6 +15,7 @@
         <label class="label">Senha</label>
       </div>
       <button class="form-submit-button" type="submit">Logar</button>
+      <button class="form-submit-button" type="button" @click="goToCadastro">Cadastrar</button>
     </form>
     <p v-if="message">{{ message }}</p> <!-- Mensagem de erro ou sucesso -->
     
@@ -53,12 +54,13 @@ export default {
     // Método para redirecionar para App.vue
     goToApp() {
       this.$router.push('/app'); // Redireciona para a nova rota
+    },
+    goToCadastro() {
+      this.$router.push('/cadastro'); // Redireciona para a nova rota
     }
   }
 };
 </script>
-
-
 
 <style scoped>
 @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600&display=swap');
@@ -193,6 +195,7 @@ form {
 
 /* Estilos aplicados apenas ao botão de envio do formulário */
 .form-submit-button {
+  margin-left: 20px;
   padding: 15px 25px;
   border: unset;
   border-radius: 15px;
