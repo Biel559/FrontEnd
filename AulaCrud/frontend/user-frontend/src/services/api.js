@@ -1,27 +1,35 @@
 import axios from 'axios'; // Importa Axios para requisições HTTP
 
-// Cria instância do Axios com URL base da API
+// URL base da API
+const BASE_URL = 'http://localhost:3000/api/books';
 
-const apiClient = axios.create({
-baseURL: 'http://localhost:3000/api/books', // URL da API
-headers: { 
-     'Content-Type': 'application/json', // Define JSON como tipo de conteúdo
-},
-});
- 
-// Exporta funções CRUD usando Axios
+// Funções CRUD usando Axios
 export default {
-getBooks() {
-     return apiClient.get('/'); // GET para Listar livros
-},
-addBook(book){
-return apiClient.post('/', book); // POST para adicionar Livro
-},
+  // GET: Obter a lista de livros
+  getBooks() {
+    return axios.get(BASE_URL);
+  },
 
-updateBook(id, book) {
-return apiClient.put(`/${id}`, book); // PUT para atualizar Livro pelo 1D
-},
-deleteBook(id) {
-return apiClient.delete(`/${id}`); // DELETE para excluir Livro pelo TD
-}
+  // POST: Adicionar um novo livro
+  addBook(book) {
+    return axios.post(BASE_URL, book, {
+      headers: {
+        'Content-Type': 'multipart/form-data', // Permite envio de arquivos
+      },
+    });
+  },
+
+  // PUT: Atualizar um livro existente
+  updateBook(id, book) {
+    return axios.put(`${BASE_URL}/${id}`, book, {
+      headers: {
+        'Content-Type': 'multipart/form-data', // Permite envio de arquivos
+      },
+    });
+  },
+
+  // DELETE: Remover um livro pelo ID
+  deleteBook(id) {
+    return axios.delete(`${BASE_URL}/${id}`);
+  },
 };

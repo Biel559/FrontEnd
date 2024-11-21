@@ -33,5 +33,8 @@ export default {
       this.bookToEdit = null; // Limpa o livro a ser editado após a ação
     },
   },
+  mounted() {
+    this.fetchBooks(); // Adiciona isso para garantir que a lista de livros seja carregada ao inicializar o componente
+  },
 };
 </script>

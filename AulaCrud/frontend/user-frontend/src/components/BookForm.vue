@@ -1,13 +1,28 @@
 <template>
   <div class="bookform-container">
     <!-- Formulário que evita o comportamento padrão de envio -->
-    <form @submit.prevent="handleSubmit">
+    <form @submit.prevent="handleSubmit" enctype="multipart/form-data">
       <!-- Campo de input para o título do livro -->
       <input class="input-field" v-model="book.title" placeholder="Título" required />
+      
       <!-- Campo de input para o autor do livro -->
       <input class="input-field" v-model="book.author" placeholder="Autor" required />
+      
       <!-- Campo de input para o ano do livro -->
       <input class="input-field" v-model="book.year" placeholder="Ano" required />
+      
+      <!-- Campo de input para o ISBN -->
+      <input class="input-field" v-model="book.isbn" placeholder="ISBN" required />
+      
+      <!-- Campo de input para a URL da imagem da capa (agora será o upload da imagem) -->
+      <input type="file" @change="handleFileChange" />
+      
+      <!-- Campo de input para a editora do livro -->
+      <input class="input-field" v-model="book.publisher" placeholder="Editora" />
+      
+      <!-- Campo de input para a sinopse do livro -->
+      <textarea class="input-field" v-model="book.synopsis" placeholder="Sinopse (opcional)"></textarea>
+      
       <!-- Botão de envio que muda o texto dependendo se é atualização ou adição -->
       <button class="submit-button" type="submit">{{ book._id ? 'Atualizar' : 'Adicionar' }}</button>
     </form>
@@ -15,41 +30,62 @@
 </template>
 
 <script>
-// Importa o serviço API para fazer requisições
-import api from '@/services/api'; 
+import api from '@/services/api';
 
 export default {
-  // Recebe o livro a ser editado como uma prop
-  props: ['bookToEdit'], 
+  props: ['bookToEdit'],
   data() {
     return {
-      // Inicializa os dados do livro, utilizando o valor da prop ou um objeto vazio
-      book: this.bookToEdit || { title: '', author: '', year: null }, 
+      book: this.bookToEdit || {
+        title: '',
+        author: '',
+        year: null,
+        isbn: '',
+        image: null,
+        publisher: '',
+        synopsis: '',
+      },
+      selectedImage: null, // Guardar a imagem selecionada
     };
   },
   watch: {
-    // Observa mudanças na prop bookToEdit
     bookToEdit: {
-      immediate: true, // Executa a função imediatamente na inicialização
+      immediate: true,
       handler(newVal) {
-        // Atualiza os dados do livro quando a prop mudar
-        this.book = newVal || { title: '', author: '', year: null }; 
+        this.book = newVal || { title: '', author: '', year: null, isbn: '', image: null, publisher: '', synopsis: '' };
       },
     },
   },
   methods: {
+    handleFileChange(event) {
+      // Armazena o arquivo da imagem selecionada
+      this.selectedImage = event.target.files[0];
+    },
     handleSubmit() {
-      // Verifica se o livro já tem um ID, indicando que é uma atualização
+      console.log("Conteúdo de selectedImage:", this.selectedImage); // <-- ADICIONE AQUI
+      const formData = new FormData();
+      formData.append('title', this.book.title);
+      formData.append('author', this.book.author);
+      formData.append('year', this.book.year);
+      formData.append('isbn', this.book.isbn);
+      formData.append('publisher', this.book.publisher);
+      formData.append('synopsis', this.book.synopsis);
+
+      if (this.selectedImage) {
+        formData.append('image', this.selectedImage);
+      }
+
+      console.log("Dados enviados:", Array.from(formData.entries()));
+
       if (this.book._id) {
-        api.updateBook(this.book._id, this.book).then(() => {
-          // Emite um evento quando o livro é atualizado
-          this.$emit('book-updated'); 
+        api.updateBook(this.book._id, formData).then(() => {
+          this.$emit('book-updated');
+          window.location.reload(); // Recarrega a página após a atualização
         });
       } else {
-        // Se não tem ID, é uma adição de novo livro
-        api.addBook(this.book).then(() => {
-          // Emite um evento quando um novo livro é adicionado
-          this.$emit('book-added'); 
+        api.addBook(formData).then(() => {
+          this.$emit('book-added');
+          window.location.reload(); // Recarrega a página após a adição
         });
       }
     },
