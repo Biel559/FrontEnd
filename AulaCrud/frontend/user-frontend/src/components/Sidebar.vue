@@ -8,7 +8,7 @@
         <!-- Conteúdo da Sidebar -->
         <div class="filter-section">
             <div class="filter-title">
-                <h3>Gêneros Literários</h3>
+                <h2>Literary Genres:</h2>
                 <img src="../assets/icons/genre-icon.png" alt="Gêneros Icon" class="title-icon" />
             </div>
             <ul class="filter-list">
@@ -25,7 +25,7 @@
             <!-- Autores -->
             <div class="filter-section">
                 <div class="filter-title">
-                    <h3>Autores Populares</h3>
+                    <h2>Popular Authors:</h2>
                     <img src="../assets/icons/author-icon.png" alt="Autores Icon" class="title-icon" />
                 </div>
                 <ul class="filter-list">
@@ -43,7 +43,7 @@
             <!-- Anos -->
             <div class="filter-section">
                 <div class="filter-title">
-                    <h3>Anos</h3>
+                    <h2>Years:</h2>
                     <img src="../assets/icons/year-icon.png" alt="Anos Icon" class="title-icon" />
                 </div>
                 <ul class="filter-list">
@@ -62,13 +62,17 @@
             <div class="footer-icon-section">
                 <img src="../assets/icons/footer-icon.png" alt="Footer Icon" class="footer-icon" />
             </div>
+            <div class="footer-icon-section-hidden">
+                <img src="../assets/img/imagemvazia.png" alt="Footer Icon" class="footer-icon" />
+            </div>
         </div>
     </div>
-    <br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br><br>
 </template>
 
 <style scoped>
+@import url('https://fonts.googleapis.com/css2?family=Inika:wght@700&display=swap');
 .sidebar {
+    font-family: "Inika",serif;
     width: 250px;
     background-color: #7037CD;
     color: white;
@@ -84,8 +88,10 @@
 }
 
 .main-icon {
-    margin-top: 40px;
-    margin-left: -15px;
+    margin-top: 10px;
+    margin-left: 10px;
+    height: 150px;
+    width: 200px;
 }
 
 .filter-section {
@@ -97,6 +103,7 @@
     align-items: center;
     justify-content: space-between;
     margin-bottom: 10px;
+    text-decoration: underline;
 }
 
 .filter-list {
@@ -114,6 +121,9 @@
     height: 150px; /* Diminui a altura */
     display: block;
     margin: 0 auto; /* Centraliza horizontalmente */
-    margin-top: -20px; /* Espaço superior */
+    margin-top: 40px; /* Espaço superior */
+}
+.footer-icon-section-hidden{
+    margin-top: -60px;
 }
 </style>
