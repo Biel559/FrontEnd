@@ -212,7 +212,7 @@ html {
 
 .nav-icons {
   display: flex;
-  margin-right: 70px;
+  -right: 70px;
   /* Adiciona espaço à esquerda dos ícones */
 }
 
@@ -277,7 +277,7 @@ html {
   grid-template-columns: repeat(3, 1fr);
   gap: 30px;
   background-color: #68B2F8;
-  margin-top: 25px;
+  padding-top: 25px;
   /* Espaçamento entre o título e o grid */
 }
 </style>

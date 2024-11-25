@@ -1,26 +1,24 @@
 <template>
     <div class="login">
+      <img src="../assets/IllumineLogo.png" alt="Logo da Biblioteca" class="logo" />
       <button class="button login-title-button" data-text="Login">
-        <span class="actual-text">&nbsp;Cadastro&nbsp;</span>
-        <span aria-hidden="true" class="hover-text">&nbsp;Cadastro&nbsp;</span>
+        <span class="actual-text">&nbsp;SignUp&nbsp;</span>
+        <span aria-hidden="true" class="hover-text">&nbsp;SignUp&nbsp;</span>
       </button>
   
       <form @submit.prevent="criarUser">
         <div class="container">
           <input v-model="username" type="text" name="text" class="input" required />
-          <label class="label">Insira o nome do seu perfil</label>
+          <label class="label">Enter your profile name</label>
         </div>
         <div class="container">
           <input v-model="password" type="password" name="password" class="input" required />
-          <label class="label">Crie uma senha</label>
+          <label class="label">Create a password</label>
         </div>
-        <button class="form-submit-button" @click="goToLogin" type="button">Voltar</button>
-        <button class="form-submit-button" type="submit">Criar Conta</button>
+        <button class="form-submit-button" @click="goToLogin" type="button">Back</button>
+        <button class="form-submit-button" type="submit">Create Account</button>
       </form>
       <p v-if="message">{{ message }}</p> <!-- Mensagem de erro ou sucesso -->
-      
-      <!-- Botão que redireciona para App.vue -->
-      <button @click="goToApp" class="form-redirect-button">crud</button>
     </div>
   </template>
   
@@ -52,9 +50,6 @@
         }
       },
       // Método para redirecionar para App.vue
-      goToApp() {
-        this.$router.push('/app'); // Redireciona para a nova rota
-      },
       goToLogin() {
         this.$router.push('/login'); // Redireciona para a nova rota
       },
@@ -64,6 +59,16 @@
   <style scoped>
   @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600&display=swap');
   
+  body, html {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #651F71; /* Define a cor de fundo */
+  overflow: hidden; /* Evita barras de rolagem indesejadas */
+  box-sizing: border-box; /* Inclui padding e bordas no tamanho do elemento */
+}
+
   .login {
     display: flex;
     flex-direction: column;
@@ -72,8 +77,16 @@
     height: 100vh;
     background-color: #f7f9fc;
     font-family: 'Arial', sans-serif;
+    background-color: #651F71; /* Define a cor de fundo */
   }
   
+  .logo {
+  width:220px; /* Ajuste o tamanho da logo conforme necessário */
+  height: auto;
+  padding-left: 5px;
+  margin-bottom: 20px; /* Espaço entre a logo e o título */
+}
+
   h1 {
     color: #333;
     margin-bottom: 20px;
@@ -158,8 +171,8 @@
   
   .login-title-button {
     --border-right: 6px;
-    --text-stroke-color: rgba(0, 0, 0);
-    --animation-color: #613c3c;
+    --text-stroke-color: rgb(255, 255, 255);
+    --animation-color: #ffffff;
     --fs-size: 2em;
     letter-spacing: 3px;
     text-decoration: none;
@@ -195,7 +208,7 @@
   /* Estilos aplicados apenas ao botão de envio do formulário */
   .form-submit-button {
     margin-left: 10px;
-    padding: 15px 25px;
+    padding: 15px 20px;
     border: unset;
     border-radius: 15px;
     color: #212121;

@@ -1,5 +1,6 @@
 <template>
   <div class="login">
+    <img src="../assets/IllumineLogo.png" alt="Logo da Biblioteca" class="logo" />
     <button class="button login-title-button" data-text="Login">
       <span class="actual-text">&nbsp;Login&nbsp;</span>
       <span aria-hidden="true" class="hover-text">&nbsp;Login&nbsp;</span>
@@ -8,19 +9,16 @@
     <form @submit.prevent="loginUser">
       <div class="container">
         <input v-model="username" type="text" name="text" class="input" required />
-        <label class="label">Nome da Conta</label>
+        <label class="label">Username</label>
       </div>
       <div class="container">
         <input v-model="password" type="password" name="password" class="input" required />
-        <label class="label">Senha</label>
+        <label class="label">Password</label>
       </div>
-      <button class="form-submit-button" type="submit">Logar</button>
-      <button class="form-submit-button" type="button" @click="goToCadastro">Cadastrar</button>
+      <button class="form-submit-button" type="submit">Login</button>
+      <button class="form-submit-button" type="button" @click="goToCadastro">SignUp</button>
     </form>
     <p v-if="message">{{ message }}</p> <!-- Mensagem de erro ou sucesso -->
-    
-    <!-- Botão que redireciona para App.vue -->
-    <button @click="goToApp" class="form-redirect-button">crud</button>
   </div>
 </template>
 
@@ -65,14 +63,35 @@ export default {
 <style scoped>
 @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600&display=swap');
 
+/* Certifique-se de que body e html cobrem toda a tela */
+body, html {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #651F71; /* Define a cor de fundo */
+  overflow: hidden; /* Evita barras de rolagem indesejadas */
+  box-sizing: border-box; /* Inclui padding e bordas no tamanho do elemento */
+}
+
+/* Garante que a div .login cobre toda a tela */
 .login {
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  height: 100vh;
-  background-color: #f7f9fc;
-  font-family: 'Arial', sans-serif;
+  min-height: 100vh; /* Garante que cobre 100% da altura */
+  width: 100vw; /* Garante que cobre 100% da largura */
+  background-color: #651F71; /* Mesma cor de fundo para continuidade */
+  margin: 0; /* Remove qualquer margem extra */
+  padding: 0; /* Remove qualquer padding extra */
+}
+
+.logo {
+  width:220px; /* Ajuste o tamanho da logo conforme necessário */
+  height: auto;
+  padding-left: 5px;
+  margin-bottom: 20px; /* Espaço entre a logo e o título */
 }
 
 h1 {
@@ -85,7 +104,8 @@ form {
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  width: 300px;
+  width: 90%; /* Ajusta a largura relativa à tela */
+  max-width: 300px; /* Define um limite máximo */
   text-align: center;
 }
 
@@ -159,8 +179,8 @@ form {
 
 .login-title-button {
   --border-right: 6px;
-  --text-stroke-color: rgba(0, 0, 0);
-  --animation-color: #613c3c;
+  --text-stroke-color: rgb(255, 255, 255);
+  --animation-color: #ffffff;
   --fs-size: 2em;
   letter-spacing: 3px;
   text-decoration: none;
