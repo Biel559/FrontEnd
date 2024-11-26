@@ -1,13 +1,16 @@
 import { createApp } from 'vue'; // Importação para Vue 3
-import App from './App.vue';
-import './assets/dashboard.css'; // Importando o CSS global
-import router from './router';
-import api from './axios'; // Importa a configuração do Axios
+import App from './App.vue'; // Componente raiz
+import './assets/dashboard.css'; // CSS global
+import router from './router'; // Configuração de rotas
+import api from './axios'; // Instância Axios personalizada
 
 const app = createApp(App); // Cria a instância do aplicativo
 
-app.config.globalProperties.$http = api; // Adiciona o Axios como uma propriedade global
+// Configura o Axios como uma propriedade global
+app.config.globalProperties.$http = api;
 
-app.use(router); // Usa o Vue Router
+// Usa o Vue Router para gerenciar as rotas
+app.use(router);
 
-app.mount('#app'); // Monta o aplicativo no elemento #app
+// Monta o aplicativo no elemento #app do DOM
+app.mount('#app');

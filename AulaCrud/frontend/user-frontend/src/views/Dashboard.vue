@@ -93,7 +93,7 @@ html {
 .dashboard {
   display: flex;
   flex-direction: column;
-  background-color: #68B2F8;
+  background-color: c;
   min-height: 100vh;
   /* Garante que cobre toda a altura */
   width: 100vw;
