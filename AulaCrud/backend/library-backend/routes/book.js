@@ -9,7 +9,7 @@ const fs = require('fs'); // Para verificar e criar diretórios
 const uploadsDir = path.join(__dirname, '../uploads');
 if (!fs.existsSync(uploadsDir)) {
   fs.mkdirSync(uploadsDir);
-}
+} 
 
 // Configuração do Multer para upload de imagens
 const upload = multer({

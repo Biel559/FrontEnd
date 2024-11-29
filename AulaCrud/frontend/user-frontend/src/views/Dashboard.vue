@@ -4,7 +4,7 @@
       <!-- Navbar -->
       <nav class="navbar">
         <div class="logo">
-          <img src="../assets/dashboardImg/logoIllumine.png" alt="Logo" />
+          <a href=""><img src="../assets/dashboardImg/logoIllumine.png" alt="Logo" @click="goToHome"/></a>
         </div>
         <div class="InputContainer">
           <input placeholder="Search for a book..." id="input" class="input" name="text" type="text" />
@@ -42,7 +42,7 @@
         </div>
       </div>
     </div>
-  </div>
+  </div> 
 </template>
 
 <script>
@@ -71,6 +71,9 @@ export default {
     },
     goToApp() {
       this.$router.push('/app'); // Redireciona para a nova rota
+    },
+    goToHome() {
+      this.$router.push('/dashboard'); // Redireciona para a nova rota
     },
   },
   mounted() {

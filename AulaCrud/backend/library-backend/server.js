@@ -9,7 +9,7 @@ const app = express();
 
 // Configuração do CORS
 app.use(cors());
-
+ 
 // Para fazer o parsing do corpo das requisições em JSON
 app.use(express.json());
 

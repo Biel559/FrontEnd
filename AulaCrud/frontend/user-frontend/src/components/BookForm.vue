@@ -1,29 +1,23 @@
 <template>
   <div class="bookform-container">
-    <!-- Formulário que evita o comportamento padrão de envio -->
     <form @submit.prevent="handleSubmit" enctype="multipart/form-data">
-      <!-- Campo de input para o título do livro -->
+      <!-- Campos do formulário -->
       <input class="input-field" v-model="book.title" placeholder="Título" required />
-      
-      <!-- Campo de input para o autor do livro -->
       <input class="input-field" v-model="book.author" placeholder="Autor" required />
-      
-      <!-- Campo de input para o ano do livro -->
       <input class="input-field" v-model="book.year" placeholder="Ano" required />
-      
-      <!-- Campo de input para o ISBN -->
       <input class="input-field" v-model="book.isbn" placeholder="ISBN" required />
       
       <!-- Campo de input para a URL da imagem da capa (agora será o upload da imagem) -->
-      <input type="file" @change="handleFileChange" />
-      
-      <!-- Campo de input para a editora do livro -->
+      <div class="file-input-container">
+        <input type="file" id="file-upload" @change="handleFileChange" />
+        <label for="file-upload" class="file-upload-label">Escolher Imagem</label>
+        <!-- Aviso de imagem escolhida -->
+        <div v-if="imageChosen" class="image-chosen-message">Imagem escolhida!</div>
+      </div>
+
       <input class="input-field" v-model="book.publisher" placeholder="Editora" />
-      
-      <!-- Campo de input para a sinopse do livro -->
       <textarea class="input-field" v-model="book.synopsis" placeholder="Sinopse (opcional)"></textarea>
-      
-      <!-- Botão de envio que muda o texto dependendo se é atualização ou adição -->
+
       <button class="submit-button" type="submit">{{ book._id ? 'Atualizar' : 'Adicionar' }}</button>
     </form>
   </div>
@@ -46,23 +40,16 @@ export default {
         synopsis: '',
       },
       selectedImage: null, // Guardar a imagem selecionada
+      imageChosen: false, // Estado do aviso de imagem escolhida
     };
-  },
-  watch: {
-    bookToEdit: {
-      immediate: true,
-      handler(newVal) {
-        this.book = newVal || { title: '', author: '', year: null, isbn: '', image: null, publisher: '', synopsis: '' };
-      },
-    },
   },
   methods: {
     handleFileChange(event) {
-      // Armazena o arquivo da imagem selecionada
       this.selectedImage = event.target.files[0];
+      // Definir se a imagem foi escolhida
+      this.imageChosen = this.selectedImage ? true : false;
     },
     handleSubmit() {
-      console.log("Conteúdo de selectedImage:", this.selectedImage); // <-- ADICIONE AQUI
       const formData = new FormData();
       formData.append('title', this.book.title);
       formData.append('author', this.book.author);
@@ -75,17 +62,15 @@ export default {
         formData.append('image', this.selectedImage);
       }
 
-      console.log("Dados enviados:", Array.from(formData.entries()));
-
       if (this.book._id) {
         api.updateBook(this.book._id, formData).then(() => {
           this.$emit('book-updated');
-          window.location.reload(); // Recarrega a página após a atualização
+          window.location.reload();
         });
       } else {
         api.addBook(formData).then(() => {
           this.$emit('book-added');
-          window.location.reload(); // Recarrega a página após a adição
+          window.location.reload();
         });
       }
     },
@@ -95,46 +80,91 @@ export default {
 
 <style scoped>
 .bookform-container {
-  max-width: 400px; /* Largura máxima do container */
-  margin: 20px auto; /* Centraliza o container com margem vertical */
-  padding: 20px; /* Padding interno */
-  border: 2px solid #80cbc4; /* Borda com cor específica */
-  border-radius: 10px; /* Bordas arredondadas */
-  background-color: #b2dfdb; /* Cor de fundo do container */
-  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* Sombra do container */
+  margin-top: 50px;
+  max-width: 400px;
+  margin: 20px auto;
+  padding: 20px;
+  border: 9px solid #4e0a57;
+  border-radius: 10px;
+  background-color: #651F71;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
 .input-field {
-  width: 94.5%; /* Largura do campo de input */
-  padding: 10px; /* Padding interno do input */
-  margin: 10px 0; /* Margem vertical entre os inputs */
-  border: 1px solid #00796b; /* Borda do input */
-  border-radius: 5px; /* Bordas arredondadas no input */
-  font-size: 16px; /* Tamanho da fonte do input */
-  font-family: 'Nunito', sans-serif; /* Fonte utilizada */
-  transition: border-color 0.3s; /* Transição suave para a cor da borda */
+  width: 94.5%;
+  padding: 10px;
+  margin: 10px 0;
+  border: 5px solid #4e0a57;
+  border-radius: 5px;
+  font-size: 16px;
+  font-family: 'Nunito', sans-serif;
+  transition: border-color 0.3s;
 }
 
 .input-field:focus {
-  border-color: #004d40; /* Muda a cor da borda ao focar */
-  outline: none; /* Remove o contorno padrão */
+  border-color: #4e0a57;
+  outline: none;
 }
 
 .submit-button {
-  width: 100%; /* Largura total do botão */
-  padding: 10px; /* Padding interno do botão */
-  background-color: #00796b; /* Cor de fundo do botão */
-  color: white; /* Cor do texto do botão */
-  border: none; /* Remove a borda padrão */
-  border-radius: 5px; /* Bordas arredondadas no botão */
-  font-size: 16px; /* Tamanho da fonte do botão */
-  font-weight: bold; /* Negrito no texto do botão */
-  cursor: pointer; /* Muda o cursor ao passar sobre o botão */
-  transition: background-color 0.3s, transform 0.2s; /* Transições suaves */
+  font-family: 'Nunito',serif;
+  width: 100%;
+  padding: 10px;
+  background-color: #7a297d;
+  color: white;
+  border: 5px solid #4e0a57;
+  border-radius: 5px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s;
 }
 
 .submit-button:hover {
-  background-color: #004d40; /* Muda a cor do botão ao passar o mouse */
-  transform: scale(1.05); /* Aumenta levemente o botão ao passar o mouse */
+  background-color: #4e0a57;
+  transform: scale(1.05);
+}
+
+/* Estilos para o botão de upload de arquivo */
+.file-input-container {
+  position: relative;
+  width: 94.5%;  /* Alinha a largura do botão com os outros campos */
+  margin: 12px auto; /* Centraliza o contêiner */
+  margin-right: 30px;
+}
+
+#file-upload {
+  display: none; /* Esconde o botão de upload padrão */
+}
+
+.file-upload-label {
+  font-family: 'Nunito', serif;
+  display: inline-block;
+  width: 100%;
+  padding: 10px;
+  background-color: #7a297d;
+  color: white;
+  text-align: center;
+  border: 5px solid #4e0a57; /* Borda igual aos outros campos */
+  border-radius: 5px;
+  font-size: 16px;
+  font-weight: bold;
+  cursor: pointer;
+  transition: background-color 0.3s, transform 0.2s;
+}
+
+.file-upload-label:hover {
+  background-color: #4e0a57;
+  transform: scale(1.05);
+}
+
+/* Estilo para o aviso de imagem escolhida */
+.image-chosen-message {
+  font-family: 'Nunito', serif;
+  margin-top: 10px;
+  color: #ffffff;
+  font-weight: bold;
+  text-align: center;
+  font-size: 14px;
 }
 </style>

@@ -4,7 +4,7 @@
       <button class="button login-title-button" data-text="Login">
         <span class="actual-text">&nbsp;SignUp&nbsp;</span>
         <span aria-hidden="true" class="hover-text">&nbsp;SignUp&nbsp;</span>
-      </button>
+      </button> 
   
       <form @submit.prevent="criarUser">
         <div class="container">

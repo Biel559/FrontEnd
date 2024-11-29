@@ -50,6 +50,9 @@ router.beforeEach((to, from, next) => {
   else if (to.name === 'Cadastro') {
     document.body.style.backgroundColor = '#651F71'; // Fundo para Dashboard 
   }
+  else if (to.name === 'App') {
+    document.body.style.backgroundColor = '#68B2F8'; // Fundo para Dashboard
+  }
   else {
     document.body.style.backgroundColor = ''; // Reseta para o padrão
   }
