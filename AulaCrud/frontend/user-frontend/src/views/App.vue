@@ -1,34 +1,33 @@
 <template>
   <div id="app">
     <nav class="navbar">
-        <div class="logo">
-          <a href=""><img src="../assets/dashboardImg/logoIllumine.png" alt="Logo" @click="goToHome"/></a>
-        </div>
-        <div class="InputContainer">
-          <input placeholder="Search for a book..." id="input" class="input" name="text" type="text" />
+      <div class="logo">
+        <a href=""><img src="../assets/dashboardImg/logoIllumine.png" alt="Logo" @click="goToHome"/></a>
+      </div>
+      <div class="InputContainer">
+        <input placeholder="Search for a book..." id="input" class="input" name="text" type="text" />
+        <label class="labelforsearch" for="input">
+          <svg class="searchIcon" viewBox="0 0 512 512">
+            <path
+              d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z">
+            </path>
+          </svg>
+        </label>
+      </div>
+      <div class="nav-icons">
+        <a href="#crud" class="icon"><img src="../assets/dashboardImg/crud.png" alt=""@click="goToApp"></a>
+        <a href="#graficos" class="icon"><img src="../assets/dashboardImg/chart.png" alt=""></a>
+        <a href="#notificacoes" class="icon"><img src="../assets/dashboardImg/notification.png" alt=""></a>
+        <a href="#configuracoes" class="icon"><img src="../assets/dashboardImg/config.png" alt=""></a>
+      </div>
+    </nav>
 
-          <label class="labelforsearch" for="input">
-            <svg class="searchIcon" viewBox="0 0 512 512">
-              <path
-                d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z">
-              </path>
-            </svg>
-          </label>
-        </div>
-        <div class="nav-icons">
-          <a href="#crud" class="icon"><img src="../assets/dashboardImg/crud.png" alt=""@click="goToApp"></a>
-          <a href="#graficos" class="icon"><img src="../assets/dashboardImg/chart.png" alt=""></a>
-          <a href="#notificacoes" class="icon"><img src="../assets/dashboardImg/notification.png" alt=""></a>
-          <a href="#configuracoes" class="icon"><img src="../assets/dashboardImg/config.png" alt=""></a>
-        </div>
-      </nav>
-
-      <div class="main-content">
-          <div class="title-container">
-            <h1 class="title">All Books</h1>
-            <img src="../assets/icons/e-book.png" alt="E-Book Icon" class="title-icon" />
-          </div>
-      </div>          
+    <div class="main-content">
+      <div class="title-container">
+        <h1 class="title">Add Books</h1>
+        <img src="../assets/img/bookAdd.png" alt="E-Book Icon" class="title-icon" />
+      </div>
+    </div>          
     <!-- Componente para o formulário de livros, passando o livro a ser editado e emitindo eventos -->
     <BookForm :bookToEdit="bookToEdit" @book-added="fetchBooks" @book-updated="fetchBooks" />
     
@@ -41,7 +40,7 @@
 // Importa os componentes BookList e BookForm
 import BookList from '../components/BookList.vue';
 import BookForm from '../components/BookForm.vue';
- 
+
 export default {
   data() {
     return {
@@ -72,9 +71,10 @@ export default {
 </script>
 
 <style scoped>
-.app{
+.app {
   background-color: #68B2F8;
 }
+
 .navbar {
   display: flex;
   align-items: center;
@@ -85,38 +85,26 @@ export default {
   top: 0;
   left: 0;
   right: 0;
-  /* Garante que ocupe toda a largura */
   z-index: 1000;
   box-sizing: border-box;
-  /* Inclui padding dentro do tamanho total */
 }
-
 
 .search-bar {
   flex-grow: 1;
-  /* Faz a barra de busca ocupar o espaço restante */
   display: flex;
-  /* Para centralizar o input */
   justify-content: center;
-  /* Centraliza o input */
 }
 
 .search-bar input {
   max-width: 400px;
-  /* Aumente a largura máxima do input */
   width: 100%;
-  /* Faz o input ocupar 100% do espaço disponível */
   padding: 12px;
-  /* Aumenta o padding para um tamanho maior */
   border: none;
   border-radius: 4px;
 }
 
-
-
 .logo img {
   height: 80px;
-  /* Ajuste conforme necessário */
   margin-right: 20px;
 }
 
@@ -183,40 +171,30 @@ export default {
   transition-duration: 0.3s;
 }
 
-
 .nav-icons {
   display: flex;
-  -right: 70px;
-  /* Adiciona espaço à esquerda dos ícones */
 }
 
 .nav-icons .icon {
   color: white;
   text-decoration: none;
   margin-left: 45px;
-  /* Reduz a margem entre os ícones */
   font-size: 20px;
-  /* Ajuste conforme necessário */
   transition: color 0.3s;
 }
 
 .nav-icons img {
   width: 64px;
-  /* Ajuste conforme necessário */
   height: 64px;
-  /* Ajuste conforme necessário */
 }
 
-
-
 .title-container {
-  display: flex; /* Ativa o layout flexível */
-  align-items: center; /* Alinha verticalmente ao centro */
-  justify-content: flex-start; /* Garante que o texto e ícone comecem juntos */
-  gap: 30px; /* Espaço entre o título e o ícone */
-  margin-bottom: 50px; /* Espaçamento inferior */
-  margin-top: 12px; /* Espaçamento superior */
-  padding-left:280px;
+  display: flex;
+  align-items: center;
+  justify-content: center; /* Alinha o conteúdo horizontalmente no centro */
+  gap: 40px;
+  margin-bottom: 50px;
+  margin-top: 12px;
 }
 
 .title {
@@ -228,13 +206,11 @@ export default {
 }
 
 .title-icon {
-  width: 95px; /* Ajuste o tamanho do ícone */
+  width: 95px;
   height: 95px;
 }
 
-
 #app {
-  padding-top: 100px; /* Ajuste conforme necessário */
+  padding-top: 100px;
 }
-
 </style>
