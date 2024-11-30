@@ -1,62 +1,69 @@
 <template>
   <div class="book-list-container">
-    <!-- Lista de livros -->
+    <!-- Lista de livros filtrados -->
     <ul class="book-list">
-      <!-- Itera sobre a lista de livros e gera um item de lista para cada livro -->
-      <li v-for="book in books" :key="book._id" class="book-item">
-        <!-- Exibe a imagem da capa do livro -->
+      <li v-for="book in filteredBooks" :key="book._id" class="book-item">
         <img :src="book.image ? `http://localhost:3000${book.image}` : ''" alt="Capa do livro" v-if="book.image" />
-        
-        <!-- Exibe o título, autor, ano, ISBN e editora -->
         <div class="book-info">
-          <span class="book-title">Título: {{ book.title }}</span>
-          <span class="book-author">Autor: {{ book.author }}</span>
-          <span class="book-year">Ano de lançamento: ({{ book.year }})</span>
+          <span class="book-title">Title: {{ book.title }}</span>
+          <span class="book-author">Author: {{ book.author }}</span>
+          <span class="book-year">Year: ({{ book.year }})</span>
           <span class="book-isbn">ISBN: {{ book.isbn }}</span>
-          <span class="book-publisher">Editora: {{ book.publisher }}</span>
+          <span class="book-publisher">Publisher: {{ book.publisher }}</span>
         </div>
-
-        <!-- Botão para editar o livro, chama a função editBook com o livro como argumento -->
-        <button @click="editBook(book)" class="edit-button">Editar</button>
-
-        <!-- Botão para excluir o livro, chama a função deleteBook com o ID do livro -->
-        <button @click="deleteBook(book._id)" class="delete-button">Excluir</button>
+        <button @click="editBook(book)" class="edit-button">Edit</button>
+        <button @click="deleteBook(book._id)" class="delete-button">Delete</button>
       </li>
     </ul>
   </div>
 </template>
 
 <script>
-// Importa o serviço API (Axios) para realizar requisições HTTP
 import api from '../services/api';
 
 export default {
+  props: {
+    searchQuery: {
+      type: String,
+      default: '', // Recebe a consulta de pesquisa como uma propriedade
+    },
+  },
   data() {
     return {
-      books: [] // Estado local da lista de livros
+      books: [],
     };
   },
+  computed: {
+    filteredBooks() {
+      // Filtra os livros com base na consulta de pesquisa
+      return this.books.filter((book) =>
+        book.title.toLowerCase().includes(this.searchQuery.toLowerCase()) ||
+        book.author.toLowerCase().includes(this.searchQuery.toLowerCase())
+      );
+    },
+  },
   methods: {
-    fetchBooks() { // Método para buscar os livros do back-end
-      api.getBooks().then(response => {
-        this.books = response.data; // Atualiza a lista de livros com a resposta da API
+    fetchBooks() {
+      api.getBooks().then((response) => {
+        this.books = response.data;
       });
     },
-    deleteBook(id) { // Método para excluir um livro pelo ID
+    deleteBook(id) {
       api.deleteBook(id).then(() => {
-        this.fetchBooks(); // Atualiza a lista de livros após a exclusão
+        this.fetchBooks();
       });
     },
-    editBook(book) { // Método para editar um livro
-      this.$emit('edit-book', book); // Emite um evento para o componente pai com o livro a ser editado
-      console.log('Editando livro:', book); // Log para verificar se a função está sendo chamada corretamente
-    }
+    editBook(book) {
+    this.$emit('edit-book', book); // Emite o livro para o App.vue
+    console.log('Editando livro:', book);
+  },
   },
   mounted() {
-    this.fetchBooks(); // Chama o método para buscar os livros ao montar o componente
-  }
+    this.fetchBooks();
+  },
 };
 </script>
+
 
    
 <style scoped>

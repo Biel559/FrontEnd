@@ -1,25 +1,29 @@
 <template>
   <div class="bookform-container">
     <form @submit.prevent="handleSubmit" enctype="multipart/form-data">
-      <!-- Campos do formulário -->
-      <input class="input-field" v-model="book.title" placeholder="Título" required />
-      <input class="input-field" v-model="book.author" placeholder="Autor" required />
-      <input class="input-field" v-model="book.year" placeholder="Ano" required />
-      <input class="input-field" v-model="book.isbn" placeholder="ISBN" required />
-      
-      <!-- Campo de input para a URL da imagem da capa (agora será o upload da imagem) -->
-      <div class="file-input-container">
-        <input type="file" id="file-upload" @change="handleFileChange" />
-        <label for="file-upload" class="file-upload-label">Escolher Imagem</label>
-        <!-- Aviso de imagem escolhida -->
-        <div v-if="imageChosen" class="image-chosen-message">Imagem escolhida!</div>
-      </div>
+  <!-- Form fields -->
+  <input class="input-field" v-model="book.title" placeholder="Title" required />
+  <input class="input-field" v-model="book.author" placeholder="Author" required />
+  <input class="input-field" v-model="book.year" placeholder="Year" required />
+  <input class="input-field" v-model="book.isbn" placeholder="ISBN" required />
+  
+  <!-- File input for the cover image -->
+  <div class="file-input-container">
+    <input type="file" id="file-upload" @change="handleFileChange" />
+    <label for="file-upload" class="file-upload-label">Choose Image</label>
+    <!-- Notification for chosen image -->
+    <div v-if="imageChosen" class="image-chosen-message">Image chosen!</div>
+  </div>
 
-      <input class="input-field" v-model="book.publisher" placeholder="Editora" />
-      <textarea class="input-field" v-model="book.synopsis" placeholder="Sinopse (opcional)"></textarea>
+  <input class="input-field" v-model="book.publisher" placeholder="Publisher" />
+  <textarea class="input-field" v-model="book.synopsis" placeholder="Synopsis (optional)"></textarea>
 
-      <button class="submit-button" type="submit">{{ book._id ? 'Atualizar' : 'Adicionar' }}</button>
-    </form>
+  <!-- Submit button -->
+  <button class="submit-button" type="submit">
+    {{ book._id ? 'Update Book' : 'Add Book' }}
+  </button>
+</form>
+
   </div>
 </template>
 
@@ -30,7 +34,7 @@ export default {
   props: ['bookToEdit'],
   data() {
     return {
-      book: this.bookToEdit || {
+      book: {
         title: '',
         author: '',
         year: null,
@@ -38,16 +42,28 @@ export default {
         image: null,
         publisher: '',
         synopsis: '',
+        _id: null,
       },
       selectedImage: null, // Guardar a imagem selecionada
       imageChosen: false, // Estado do aviso de imagem escolhida
     };
   },
+  watch: {
+    bookToEdit: {
+      immediate: true,
+      handler(newValue) {
+        if (newValue) {
+          this.book = { ...newValue }; // Atualiza o estado local com o livro para editar
+        } else {
+          this.resetForm();
+        }
+      },
+    },
+  },
   methods: {
     handleFileChange(event) {
       this.selectedImage = event.target.files[0];
-      // Definir se a imagem foi escolhida
-      this.imageChosen = this.selectedImage ? true : false;
+      this.imageChosen = !!this.selectedImage; // Define se a imagem foi escolhida
     },
     handleSubmit() {
       const formData = new FormData();
@@ -65,18 +81,33 @@ export default {
       if (this.book._id) {
         api.updateBook(this.book._id, formData).then(() => {
           this.$emit('book-updated');
-          window.location.reload();
+          this.resetForm();
         });
       } else {
         api.addBook(formData).then(() => {
           this.$emit('book-added');
-          window.location.reload();
+          this.resetForm();
         });
       }
+    },
+    resetForm() {
+      this.book = {
+        title: '',
+        author: '',
+        year: null,
+        isbn: '',
+        image: null,
+        publisher: '',
+        synopsis: '',
+        _id: null,
+      };
+      this.selectedImage = null;
+      this.imageChosen = false;
     },
   },
 };
 </script>
+
 
 <style scoped>
 .bookform-container {

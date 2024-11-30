@@ -1,8 +1,9 @@
 import { createRouter, createWebHistory } from 'vue-router'; 
 import Login from '../views/Login.vue'; 
-import Dashboard from '../views/Dashboard.vue'; 
-import App from '../views/App.vue'; // Importa o componente App
+import Home from '../views/Home.vue'; 
+import Crud from '../views/Crud.vue'; // Importa o componente App
 import Cadastro from '@/views/Cadastro.vue';
+import Book from '../views/Book.vue'
 
 const routes = [
   {
@@ -11,15 +12,15 @@ const routes = [
     component: Login,
   },
   {
-    path: '/dashboard',
-    name: 'Dashboard',
-    component: Dashboard,
+    path: '/home',
+    name: 'Home',
+    component: Home,
     meta: { requiresAuth: true },
   },
   {
-    path: '/app', // Nova rota para App.vue
-    name: 'App',
-    component: App,
+    path: '/crud', // Nova rota para App.vue
+    name: 'Crud',
+    component: Crud,
   },
   {
     path: '/cadastro', // Nova rota para Cadastro.vue
@@ -30,6 +31,11 @@ const routes = [
     path: '/:catchAll(.*)', // Usando a nova sintaxe para rotas coringa
     redirect: '/login',
   },
+  {
+    path: '/book/:id',
+    name: 'Book',
+    component: Book,
+  },  
 ];
 
 const router = createRouter({
@@ -44,13 +50,16 @@ router.beforeEach((to, from, next) => {
   // Alterar o fundo do body com base na rota
   if (to.name === 'Login') {
     document.body.style.backgroundColor = '#651F71'; // Fundo para Login
-  } else if (to.name === 'Dashboard') {
+  } else if (to.name === 'Home') {
     document.body.style.backgroundColor = '#68B2F8'; // Fundo para Dashboard
   }
   else if (to.name === 'Cadastro') {
     document.body.style.backgroundColor = '#651F71'; // Fundo para Dashboard 
   }
-  else if (to.name === 'App') {
+  else if (to.name === 'Crud') {
+    document.body.style.backgroundColor = '#68B2F8'; // Fundo para Dashboard
+  }
+  else if (to.name === 'Book') {
     document.body.style.backgroundColor = '#68B2F8'; // Fundo para Dashboard
   }
   else {

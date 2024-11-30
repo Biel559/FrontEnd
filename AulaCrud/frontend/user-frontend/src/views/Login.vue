@@ -42,7 +42,7 @@ export default {
         });
         this.message = 'Login bem-sucedido!';
         localStorage.setItem('token', response.data.token);
-        this.$router.push('/dashboard');
+        this.$router.push('/home');
       } catch (error) {
         this.message = error.response && error.response.data && error.response.data.message
           ? error.response.data.message

@@ -5,7 +5,14 @@
         <a href=""><img src="../assets/dashboardImg/logoIllumine.png" alt="Logo" @click="goToHome"/></a>
       </div>
       <div class="InputContainer">
-        <input placeholder="Search for a book..." id="input" class="input" name="text" type="text" />
+        <input
+          placeholder="Search for a book..."
+          id="input"
+          class="input"
+          v-model="searchQuery" 
+          name="text"
+          type="text"
+        />
         <label class="labelforsearch" for="input">
           <svg class="searchIcon" viewBox="0 0 512 512">
             <path
@@ -15,7 +22,7 @@
         </label>
       </div>
       <div class="nav-icons">
-        <a href="#crud" class="icon"><img src="../assets/dashboardImg/crud.png" alt=""@click="goToApp"></a>
+        <a href="#crud" class="icon"><img src="../assets/dashboardImg/crud.png" alt="" @click="goToApp"></a>
         <a href="#graficos" class="icon"><img src="../assets/dashboardImg/chart.png" alt=""></a>
         <a href="#notificacoes" class="icon"><img src="../assets/dashboardImg/notification.png" alt=""></a>
         <a href="#configuracoes" class="icon"><img src="../assets/dashboardImg/config.png" alt=""></a>
@@ -27,48 +34,46 @@
         <h1 class="title">Add Books</h1>
         <img src="../assets/img/bookAdd.png" alt="E-Book Icon" class="title-icon" />
       </div>
-    </div>          
-    <!-- Componente para o formulário de livros, passando o livro a ser editado e emitindo eventos -->
+    </div>
     <BookForm :bookToEdit="bookToEdit" @book-added="fetchBooks" @book-updated="fetchBooks" />
-    
-    <!-- Componente para listar os livros, emitindo um evento ao editar um livro -->
-    <BookList @edit-book="setBookToEdit" ref="bookList" />
+    <BookList :searchQuery="searchQuery" @edit-book="setBookToEdit" ref="bookList" />
   </div>
-</template> 
+</template>
 
 <script>
-// Importa os componentes BookList e BookForm
 import BookList from '../components/BookList.vue';
 import BookForm from '../components/BookForm.vue';
 
 export default {
   data() {
     return {
-      bookToEdit: null, // Estado do livro a ser editado (inicialmente nulo)
+      bookToEdit: null,
+      searchQuery: '', // Adiciona o estado para a consulta de pesquisa
     };
   },
   components: {
-    // Registra os componentes que serão usados no template
     BookList,
     BookForm,
   },
   methods: {
     setBookToEdit(book) {
-      this.bookToEdit = book; // Define o livro a ser editado quando o evento é emitido
+      this.bookToEdit = { ...book }; // Garante que o objeto seja passado por cópia
     },
     fetchBooks() {
-      this.$refs.bookList.fetchBooks(); // Chama o método fetchBooks do componente BookList para atualizar a lista de livros
-      this.bookToEdit = null; // Limpa o livro a ser editado após a ação
+      this.$refs.bookList.fetchBooks();
+      this.bookToEdit = null;
     },
     goToHome() {
-      this.$router.push('/dashboard'); // Redireciona para a nova rota
+      this.$router.push('/home');
     },
   },
   mounted() {
-    this.fetchBooks(); // Adiciona isso para garantir que a lista de livros seja carregada ao inicializar o componente
+    this.fetchBooks();
   },
 };
 </script>
+
+
 
 <style scoped>
 .app {

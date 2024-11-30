@@ -4,24 +4,32 @@
       <!-- Navbar -->
       <nav class="navbar">
         <div class="logo">
-          <a href=""><img src="../assets/dashboardImg/logoIllumine.png" alt="Logo" @click="goToHome"/></a>
+          <a href=""><img src="../assets/dashboardImg/logoIllumine.png" alt="Logo" @click="goToHome" /></a>
         </div>
         <div class="InputContainer">
-          <input placeholder="Search for a book..." id="input" class="input" name="text" type="text" />
+          <input
+            placeholder="Search for a book..."
+            id="input"
+            class="input"
+            name="text"
+            type="text"
+            v-model="searchQuery"
+            @input="filterBooks"
+          />
 
           <label class="labelforsearch" for="input">
             <svg class="searchIcon" viewBox="0 0 512 512">
               <path
-                d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z">
-              </path>
+                d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z"
+              ></path>
             </svg>
           </label>
         </div>
         <div class="nav-icons">
-          <a href="#crud" class="icon"><img src="../assets/dashboardImg/crud.png" alt=""@click="goToApp"></a>
-          <a href="#graficos" class="icon"><img src="../assets/dashboardImg/chart.png" alt=""></a>
-          <a href="#notificacoes" class="icon"><img src="../assets/dashboardImg/notification.png" alt=""></a>
-          <a href="#configuracoes" class="icon"><img src="../assets/dashboardImg/config.png" alt=""></a>
+          <a href="#crud" class="icon"><img src="../assets/dashboardImg/crud.png" alt="" @click="goToApp" /></a>
+          <a href="#graficos" class="icon"><img src="../assets/dashboardImg/chart.png" alt="" /></a>
+          <a href="#notificacoes" class="icon"><img src="../assets/dashboardImg/notification.png" alt="" /></a>
+          <a href="#configuracoes" class="icon"><img src="../assets/dashboardImg/config.png" alt="" /></a>
         </div>
       </nav>
 
@@ -36,13 +44,18 @@
 
           <div class="book-grid">
             <!-- Renderiza múltiplos BookCards dinamicamente -->
-            <BookCard v-for="(book, index) in books" :key="index" :book="book" />
-          </div>
+            <BookCard 
+  v-for="(book, index) in filteredBooks" 
+  :key="index" 
+  :book="book" 
+  @reserve="goToBook"
+/>
 
+          </div>
         </div>
       </div>
     </div>
-  </div> 
+  </div>
 </template>
 
 <script>
@@ -58,22 +71,35 @@ export default {
   data() {
     return {
       books: [], // Lista de livros obtidos da API
+      searchQuery: '', // Texto da barra de pesquisa
+      filteredBooks: [], // Lista de livros filtrados
     };
   },
   methods: {
+    goToBook(book) {
+    this.$router.push({ name: 'Book', params: { id: book._id }, query: { ...book } });
+  },
     async fetchBooks() {
       try {
         const response = await api.getBooks(); // Busca os livros do banco
         this.books = response.data; // Atualiza a lista de livros
+        this.filteredBooks = this.books; // Inicializa os livros filtrados com todos os livros
       } catch (error) {
         console.error('Erro ao buscar livros:', error);
       }
     },
+    filterBooks() {
+      const query = this.searchQuery.toLowerCase();
+      this.filteredBooks = this.books.filter(
+        (book) =>
+          book.title.toLowerCase().includes(query) || book.author.toLowerCase().includes(query)
+      );
+    },
     goToApp() {
-      this.$router.push('/app'); // Redireciona para a nova rota
+      this.$router.push('/crud'); // Redireciona para a nova rota
     },
     goToHome() {
-      this.$router.push('/dashboard'); // Redireciona para a nova rota
+      this.$router.push('/home'); // Redireciona para a nova rota
     },
   },
   mounted() {
@@ -81,8 +107,6 @@ export default {
   },
 };
 </script>
-
-
 
 <style scoped>
 @import url('https://fonts.googleapis.com/css2?family=Inika:wght@400;700&display=swap');
@@ -257,7 +281,7 @@ html {
   gap: 30px; /* Espaço entre o título e o ícone */
   margin-bottom: 50px; /* Espaçamento inferior */
   margin-top: 12px; /* Espaçamento superior */
-  padding-left: 900px;
+  padding-left: 850px;
 }
 
 .title {

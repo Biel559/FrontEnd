@@ -39,11 +39,11 @@
       };
     },
     methods: {
-      reserveBook() {
-        console.log(`Reservando o livro: ${this.book.title}`);
-        this.$emit('reserve', this.book); // Emite o evento para o componente pai
-      },
-    },
+  reserveBook() {
+    this.$emit('reserve', this.book);
+  },
+},
+
   };
   </script>
   
@@ -53,16 +53,20 @@
 /* From Uiverse.io by waleedlh10 */
 @import url('https://fonts.googleapis.com/css2?family=Inika:wght@700&display=swap');
 .card {
-    width: 280px;
-    background: white;
-    border-radius: 10px;
-    box-shadow: 0px 0px 14px -2px #bebebe;
-    transition: 0.2s ease-in-out;
+  width: 280px;
+  background: white;
+  border-radius: 10px;
+  box-shadow: 0px 0px 14px -2px #bebebe;
+  transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
 }
 
 .card:hover {
-    cursor: pointer;
+  cursor: pointer;
+  transform: translateY(-5px); /* Eleva o card */
+  box-shadow: 0px 4px 20px -2px rgba(0, 0, 0, 0.2); /* Intensifica a sombra */
+  background-color: #f9f9f9; /* Fundo branco mais claro */
 }
+
 
 .img {
     width: 100%;
