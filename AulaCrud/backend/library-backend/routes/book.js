@@ -9,7 +9,7 @@ const fs = require('fs'); // Para verificar e criar diretórios
 const uploadsDir = path.join(__dirname, '../uploads');
 if (!fs.existsSync(uploadsDir)) {
   fs.mkdirSync(uploadsDir);
-} 
+}
 
 // Configuração do Multer para upload de imagens
 const upload = multer({
@@ -30,7 +30,7 @@ router.use('/uploads', express.static(path.join(__dirname, '../uploads')));
 
 // *** CRIAÇÃO (POST) ***
 router.post('/', upload, async (req, res) => {
-  const { title, author, year, isbn, publisher, synopsis } = req.body;
+  const { title, author, year, isbn, publisher, synopsis, genre, quantity } = req.body; // Adicionando o campo quantity
   const image = req.file ? `/uploads/${req.file.filename}` : ''; // Caminho acessível pela URL
 
   try {
@@ -42,6 +42,10 @@ router.post('/', upload, async (req, res) => {
       image, // Salva o caminho da imagem como URL
       publisher,
       synopsis,
+      genre, // Adiciona o gênero literário
+      rating: 0, // Inicializa a nota como 0
+      ratings: [], // Inicializa o array de avaliações vazio
+      quantity: quantity || 0, // Adiciona a quantidade, ou 0 caso não seja fornecida
     });
 
     await newBook.save();
@@ -51,23 +55,36 @@ router.post('/', upload, async (req, res) => {
   }
 });
 
+
 // *** LEITURA (GET) ***
 router.get('/', async (req, res) => {
   try {
     const books = await Book.find(); // Buscamos todos os livros
     res.status(200).json(books); // Retornamos a lista de livros
   } catch (error) {
-    res.status(500).json({ message: 'Erro ao buscar livros', error }); // Retornamos erro, se houver
+    res.status(500).json({ message: 'Erro ao buscar livros', error });
   }
 });
 
 // *** ATUALIZAÇÃO (PUT) ***
 router.put('/:id', upload, async (req, res) => {
-  const { title, author, year, isbn, publisher, synopsis } = req.body; // Extraímos os novos dados
+  const { title, author, year, isbn, publisher, synopsis, genre, quantity } = req.body; // Extraímos os novos dados
   const image = req.file ? `/uploads/${req.file.filename}` : undefined; // Atualiza apenas se houver nova imagem
 
-  const updatedData = { title, author, year, isbn, publisher, synopsis };
-  if (image) updatedData.image = image;
+  const updatedData = { 
+    title,
+    author,
+    year,
+    isbn,
+    publisher,
+    synopsis,
+    genre, // Adiciona o gênero literário
+    quantity: quantity !== undefined ? quantity : undefined, // Atualiza a quantidade, se fornecida
+    rating: undefined, // Não atualiza a nota diretamente (será atualizada nas avaliações)
+    ratings: undefined // Não atualiza o array de avaliações diretamente
+  };
+
+  if (image) updatedData.image = image; // Se houver uma nova imagem, ela é atualizada
 
   try {
     const updatedBook = await Book.findByIdAndUpdate(
@@ -82,9 +99,10 @@ router.put('/:id', upload, async (req, res) => {
 
     res.status(200).json(updatedBook); // Retornamos o livro atualizado
   } catch (error) {
-    res.status(500).json({ message: 'Erro ao atualizar livro', error }); // Retornamos erro, se houver
+    res.status(500).json({ message: 'Erro ao atualizar livro', error });
   }
 });
+
 
 // *** EXCLUSÃO (DELETE) ***
 router.delete('/:id', async (req, res) => {
@@ -95,9 +113,58 @@ router.delete('/:id', async (req, res) => {
     }
     res.status(200).json({ message: 'Livro deletado com sucesso' }); // Retornamos mensagem de sucesso
   } catch (error) {
-    res.status(500).json({ message: 'Erro ao deletar livro', error }); // Retornamos erro, se houver
+    res.status(500).json({ message: 'Erro ao deletar livro', error });
   }
 });
+
+// *** ROTA PARA AVALIAR O LIVRO ***
+router.put('/:id/rate', async (req, res) => {
+  const { userId, rating } = req.body; // Recebe o ID do usuário e a avaliação
+
+  // Verifica se a avaliação está entre 0 e 5
+  if (rating < 0 || rating > 5) {
+    return res.status(400).json({ message: 'A avaliação deve ser entre 0 e 5' });
+  }
+
+  try {
+    // Encontrar o livro
+    const book = await Book.findById(req.params.id);
+
+    if (!book) {
+      return res.status(404).json({ message: 'Livro não encontrado' });
+    }
+
+    // Verificar se o usuário já avaliou este livro
+    if (book.ratings.some(r => r.userId === userId)) {
+      return res.status(400).json({ message: 'Você já avaliou este livro' });
+    }
+
+    // Adicionar a avaliação no array de ratings
+    book.ratings.push({ userId, rating });
+
+    // Calcular a nova média de avaliação
+    const totalRating = book.ratings.reduce((acc, r) => acc + r.rating, 0);
+    book.rating = totalRating / book.ratings.length;
+
+    await book.save(); // Salva a nova avaliação e a média
+
+    res.status(200).json(book); // Retorna o livro com a nova avaliação e média
+  } catch (error) {
+    res.status(500).json({ message: 'Erro ao avaliar livro', error });
+  }
+});
+
+// Exemplo no seu controller
+router.put('/:id/quantity', (req, res) => {
+  const { id } = req.params;
+  const { quantity } = req.body;
+  
+  // Atualiza a quantidade do livro
+  Book.findByIdAndUpdate(id, { quantity }, { new: true })
+    .then((book) => res.status(200).json(book))
+    .catch((err) => res.status(500).json({ error: 'Failed to update quantity', err }));
+});
+
 
 // Exportamos o roteador para ser usado no server.js
 module.exports = router;

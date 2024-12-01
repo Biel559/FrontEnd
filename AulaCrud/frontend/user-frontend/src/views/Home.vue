@@ -7,21 +7,14 @@
           <a href=""><img src="../assets/dashboardImg/logoIllumine.png" alt="Logo" @click="goToHome" /></a>
         </div>
         <div class="InputContainer">
-          <input
-            placeholder="Search for a book..."
-            id="input"
-            class="input"
-            name="text"
-            type="text"
-            v-model="searchQuery"
-            @input="filterBooks"
-          />
+          <input placeholder="Search for a book..." id="input" class="input" name="text" type="text"
+            v-model="searchQuery" @input="filterBooks" />
 
           <label class="labelforsearch" for="input">
             <svg class="searchIcon" viewBox="0 0 512 512">
               <path
-                d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z"
-              ></path>
+                d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z">
+              </path>
             </svg>
           </label>
         </div>
@@ -35,21 +28,24 @@
 
       <!-- Sidebar -->
       <div class="content">
-        <Sidebar />
+        <Sidebar @filter="applyFilter" />
         <div class="main-content">
           <div class="title-container">
+            <button class="reset-button" @click="resetFilters">Reset Filters</button>
             <h1 class="title">All Books</h1>
             <img src="../assets/icons/e-book.png" alt="E-Book Icon" class="title-icon" />
           </div>
 
           <div class="book-grid">
-            <!-- Renderiza múltiplos BookCards dinamicamente -->
-            <BookCard 
-  v-for="(book, index) in filteredBooks" 
-  :key="index" 
-  :book="book" 
-  @reserve="goToBook"
-/>
+            <transition-group name="fade" tag="div" class="book-grid">
+  <BookCard 
+    v-for="(book) in filteredBooks" 
+    :key="book._id" 
+    :book="book" 
+    @reserve="goToBook" 
+  />
+</transition-group>
+
 
           </div>
         </div>
@@ -77,8 +73,8 @@ export default {
   },
   methods: {
     goToBook(book) {
-    this.$router.push({ name: 'Book', params: { id: book._id }, query: { ...book } });
-  },
+      this.$router.push({ name: 'Book', params: { id: book._id }, query: { ...book } });
+    },
     async fetchBooks() {
       try {
         const response = await api.getBooks(); // Busca os livros do banco
@@ -100,6 +96,44 @@ export default {
     },
     goToHome() {
       this.$router.push('/home'); // Redireciona para a nova rota
+    },
+    applyFilter(filter) {
+      console.log('Filtro aplicado:', filter);
+
+      // Copia a lista original de livros para ser filtrada
+      let filtered = this.books;
+
+      if (filter.type === 'year') {
+        // Filtra por anos acima ou iguais a um valor
+        filtered = filtered.filter((book) => parseInt(book.year) >= filter.value);
+      } else if (filter.type === 'year-range') {
+        // Filtra por um intervalo de anos
+        filtered = filtered.filter(
+          (book) =>
+            parseInt(book.year) >= filter.value[0] &&
+            parseInt(book.year) <= filter.value[1]
+        );
+      } else if (filter.type === 'year-below') {
+        // Filtra por anos abaixo ou iguais a um valor
+        filtered = filtered.filter((book) => parseInt(book.year) <= filter.value);
+      } else if (filter.type === 'genre') {
+        // Filtra por gênero (verifica se o gênero filtrado está contido na string)
+        filtered = filtered.filter((book) =>
+          book.genre.toLowerCase().includes(filter.value.toLowerCase())
+        );
+      } else if (filter.type === 'author') {
+        // Filtra por autor
+        filtered = filtered.filter((book) => book.author === filter.value);
+      }
+
+      // Atualiza a lista de livros filtrados
+      this.filteredBooks = filtered;
+
+      console.log('Livros filtrados:', this.filteredBooks);
+    },
+    resetFilters() {
+      this.filteredBooks = this.books; // Reseta a lista filtrada para todos os livros
+      this.searchQuery = ''; // Limpa o texto da barra de pesquisa, se necessário
     },
   },
   mounted() {
@@ -275,14 +309,48 @@ html {
 }
 
 .title-container {
-  display: flex; /* Ativa o layout flexível */
-  align-items: center; /* Alinha verticalmente ao centro */
-  justify-content: flex-start; /* Garante que o texto e ícone comecem juntos */
-  gap: 30px; /* Espaço entre o título e o ícone */
-  margin-bottom: 50px; /* Espaçamento inferior */
-  margin-top: 12px; /* Espaçamento superior */
-  padding-left: 850px;
+  display: flex;
+  /* Ativa o layout flexível */
+  align-items: center;
+  /* Alinha verticalmente ao centro */
+  justify-content: flex-start;
+  /* Garante que o texto e ícone comecem juntos */
+  gap: 50px;
+  /* Espaço entre o título e o ícone */
+  margin-bottom: 50px;
+  /* Espaçamento inferior */
+  margin-top: 12px;
+  /* Espaçamento superior */
+  padding-left: 350px;
 }
+
+.reset-button {
+  background-color: #ff4c4c;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1.5rem;
+  font-weight: bold;
+  cursor: pointer;
+  box-shadow: 2px 2px 6px rgba(0, 0, 0, 0.2);
+  padding: 15px 30px;
+  /* Aumente o padding para deixar o botão maior */
+  margin-right: 300px;
+}
+
+.reset-button:hover {
+  background-color: #e04343;
+}
+
+.title-container {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  gap: 20px;
+  margin-bottom: 50px;
+  margin-top: 12px;
+}
+
 
 .title {
   font-family: "Inika", serif;
@@ -293,18 +361,38 @@ html {
 }
 
 .title-icon {
-  width: 95px; /* Ajuste o tamanho do ícone */
+  width: 95px;
+  /* Ajuste o tamanho do ícone */
   height: 95px;
 }
 
 .book-grid {
-  padding-left: 450px;
-  /* Mantém o padding ajustado */
+  padding-left: 175px;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  gap: 30px;
+  column-gap: 280px; /* Distância horizontal entre os cards */
+  row-gap: 50px; /* Distância vertical entre os cards (ajuste conforme necessário) */
   background-color: #68B2F8;
-  padding-top: 25px;
-  /* Espaçamento entre o título e o grid */
+  padding-top: 15px;
 }
+
+.book-grid .fade-enter-active,
+.book-grid .fade-leave-active {
+  transition: opacity 1s ease, transform 1s ease; /* Aumente a duração para 1s */
+}
+
+.book-grid .fade-enter, 
+.book-grid .fade-leave-to /* .fade-leave-to é necessário para a animação de saída */
+{
+  opacity: 0;
+  transform: translateY(20px); /* Aplique a transformação */
+}
+
+.book-grid .fade-enter-to /* Este é o estado após a entrada */
+{
+  opacity: 1;
+  transform: translateY(0);
+}
+
+
 </style>

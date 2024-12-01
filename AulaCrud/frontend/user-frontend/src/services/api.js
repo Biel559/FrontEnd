@@ -32,4 +32,14 @@ export default {
   deleteBook(id) {
     return axios.delete(`${BASE_URL}/${id}`);
   },
+
+  // PUT: Avaliar um livro
+  rateBook(id, ratingData) {
+    return axios.put(`${BASE_URL}/${id}/rate`, ratingData);
+  },
+
+  // PUT: Atualizar a quantidade de um livro
+  updateBookQuantity(id, data) {
+    return axios.put(`${BASE_URL}/${id}/quantity`, data);
+  }  
 };

@@ -10,7 +10,22 @@
           <span class="book-year">Year: ({{ book.year }})</span>
           <span class="book-isbn">ISBN: {{ book.isbn }}</span>
           <span class="book-publisher">Publisher: {{ book.publisher }}</span>
+          
+          <!-- Exibe a quantidade -->
+          <span class="book-quantity">Quantity: {{ book.quantity }}</span>
+
+          <!-- Exibe o rating -->
+          <span class="book-rating">Rating: {{ book.rating }}</span> <!-- Exibe o rating -->
+
+          <!-- Exibe o gênero -->
+          <span class="book-genre">Genre: {{ book.genre }}</span>
         </div>
+
+        <!-- Botões para aumentar/diminuir a quantidade -->
+        <button @click="updateQuantity(book, 'increase')" class="quantity-button increase-button">+</button>
+        <button @click="updateQuantity(book, 'decrease')" class="quantity-button decrease-button">-</button>
+
+        <!-- Botões de editar e excluir -->
         <button @click="editBook(book)" class="edit-button">Edit</button>
         <button @click="deleteBook(book._id)" class="delete-button">Delete</button>
       </li>
@@ -54,19 +69,51 @@ export default {
       });
     },
     editBook(book) {
-    this.$emit('edit-book', book); // Emite o livro para o App.vue
-    console.log('Editando livro:', book);
-  },
+      this.$emit('edit-book', book); // Emite o livro para o App.vue
+    },
+    updateQuantity(book, action) {
+      let newQuantity = action === 'increase' ? book.quantity + 1 : book.quantity - 1;
+      newQuantity = Math.max(newQuantity, 0); // Impede que a quantidade fique negativa
+
+      // Atualiza a quantidade do livro no backend
+      api.updateBookQuantity(book._id, { quantity: newQuantity }).then(() => {
+        book.quantity = newQuantity; // Atualiza localmente
+      });
+    },
   },
   mounted() {
     this.fetchBooks();
   },
 };
+
 </script>
 
-
-   
 <style scoped>
+/* Estilos para os botões de quantidade */
+.quantity-button {
+  padding: 8px 12px;
+  font-size: 16px;
+  cursor: pointer;
+  border: none;
+  border-radius: 50%;
+  margin-left: 10px;
+}
+
+.increase-button {
+  background-color: #4caf50;
+  color: white;
+}
+
+.decrease-button {
+  background-color: #f44336;
+  color: white;
+}
+
+.quantity-button:hover {
+  transform: scale(1.1);
+}
+
+/* Estilos gerais */
 @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600&display=swap');
 
 span {
@@ -112,13 +159,16 @@ span {
 .book-author,
 .book-year,
 .book-isbn,
-.book-publisher {
+.book-publisher,
+.book-quantity,
+.book-genre,
+.book-rating {
   display: block;
   font-size: 1rem;
   margin: 3px 0;
 }
 
-img{
+img {
   width: 120px;
   height: 180px;
   object-fit: cover;
@@ -163,4 +213,4 @@ img{
   background-color: #b71c1c;
   transform: scale(1.05);
 }
-</style>  
+</style>

@@ -1,29 +1,32 @@
 <template>
   <div class="bookform-container">
     <form @submit.prevent="handleSubmit" enctype="multipart/form-data">
-  <!-- Form fields -->
-  <input class="input-field" v-model="book.title" placeholder="Title" required />
-  <input class="input-field" v-model="book.author" placeholder="Author" required />
-  <input class="input-field" v-model="book.year" placeholder="Year" required />
-  <input class="input-field" v-model="book.isbn" placeholder="ISBN" required />
-  
-  <!-- File input for the cover image -->
-  <div class="file-input-container">
-    <input type="file" id="file-upload" @change="handleFileChange" />
-    <label for="file-upload" class="file-upload-label">Choose Image</label>
-    <!-- Notification for chosen image -->
-    <div v-if="imageChosen" class="image-chosen-message">Image chosen!</div>
-  </div>
+      <!-- Form fields -->
+      <input class="input-field" v-model="book.title" placeholder="Title" required />
+      <input class="input-field" v-model="book.author" placeholder="Author" required />
+      <input class="input-field" v-model="book.year" placeholder="Year" required />
+      <input class="input-field" v-model="book.isbn" placeholder="ISBN" required />
+      
+      <!-- File input for the cover image -->
+      <div class="file-input-container">
+        <input type="file" id="file-upload" @change="handleFileChange" />
+        <label for="file-upload" class="file-upload-label">Choose Image</label>
+        <!-- Notification for chosen image -->
+        <div v-if="imageChosen" class="image-chosen-message">Image chosen!</div>
+      </div>
 
-  <input class="input-field" v-model="book.publisher" placeholder="Publisher" />
-  <textarea class="input-field" v-model="book.synopsis" placeholder="Synopsis (optional)"></textarea>
+      <input class="input-field" v-model="book.publisher" placeholder="Publisher" />
+      <textarea class="input-field" v-model="book.synopsis" placeholder="Synopsis (optional)"></textarea>
 
-  <!-- Submit button -->
-  <button class="submit-button" type="submit">
-    {{ book._id ? 'Update Book' : 'Add Book' }}
-  </button>
-</form>
+      <!-- New fields for quantity and genre -->
+      <input class="input-field" v-model="book.quantity" type="number" placeholder="Quantity" min="0" required />
+      <input class="input-field" v-model="book.genre" placeholder="Genre" required />
 
+      <!-- Submit button -->
+      <button class="submit-button" type="submit">
+        {{ book._id ? 'Update Book' : 'Add Book' }}
+      </button>
+    </form>
   </div>
 </template>
 
@@ -42,6 +45,8 @@ export default {
         image: null,
         publisher: '',
         synopsis: '',
+        quantity: null,  // Adiciona quantity
+        genre: '',  // Adiciona genre
         _id: null,
       },
       selectedImage: null, // Guardar a imagem selecionada
@@ -73,6 +78,8 @@ export default {
       formData.append('isbn', this.book.isbn);
       formData.append('publisher', this.book.publisher);
       formData.append('synopsis', this.book.synopsis);
+      formData.append('quantity', this.book.quantity);  // Adiciona quantity
+      formData.append('genre', this.book.genre);  // Adiciona genre
 
       if (this.selectedImage) {
         formData.append('image', this.selectedImage);
@@ -99,6 +106,8 @@ export default {
         image: null,
         publisher: '',
         synopsis: '',
+        quantity: null,  // Reseta quantity
+        genre: '',  // Reseta genre
         _id: null,
       };
       this.selectedImage = null;
@@ -107,7 +116,6 @@ export default {
   },
 };
 </script>
-
 
 <style scoped>
 .bookform-container {

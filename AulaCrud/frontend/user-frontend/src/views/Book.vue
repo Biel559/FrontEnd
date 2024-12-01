@@ -276,7 +276,7 @@ export default {
     width: 70vw; /* Ajuste para 100% da largura da tela */
 }
 .book-image img {
-    margin-top: 3vh;
+    margin-top: 1.5vh;
     width: 350px;
     /* Aumenta o tamanho da imagem */
     height: auto;

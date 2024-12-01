@@ -12,14 +12,14 @@
                 <img src="../assets/icons/genre-icon.png" alt="Gêneros Icon" class="title-icon" />
             </div>
             <ul class="filter-list">
-                <li>Fiction</li>
-                <li>Drama</li>
-                <li>Fable</li>
-                <li>Poetry</li>
-                <li>Children Books</li>
-                <li>Science</li>
-                <li>Business & Economics</li>
-                <li>Philosophy</li>
+                <li @click="$emit('filter', { type: 'genre', value: 'Fiction' })">Fiction</li>
+                <li @click="$emit('filter', { type: 'genre', value: 'Drama' })">Drama</li>
+                <li @click="$emit('filter', { type: 'genre', value: 'Fable' })">Fable</li>
+                <li @click="$emit('filter', { type: 'genre', value: 'Poetry' })">Poetry</li>
+                <li @click="$emit('filter', { type: 'genre', value: 'Children Books' })">Children Books</li>
+                <li @click="$emit('filter', { type: 'genre', value: 'Science' })">Science</li>
+                <li @click="$emit('filter', { type: 'genre', value: 'Business & Economics' })">Business & Economics</li>
+                <li @click="$emit('filter', { type: 'genre', value: 'Philosophy' })">Philosophy</li>
             </ul>
   
             <!-- Autores -->
@@ -29,14 +29,14 @@
                     <img src="../assets/icons/author-icon.png" alt="Autores Icon" class="title-icon" />
                 </div>
                 <ul class="filter-list">
-                    <li>Sun Tsu</li>
-                    <li>Lewis Carroll</li>
-                    <li>Bram Stoker</li>
-                    <li>J.K. Rowling</li>
-                    <li>J.R.R. Tolkien</li>
-                    <li>Herman Melville</li>
-                    <li>L. Frank Baum</li>
-                    <li>Antoine De Saint-Exupéry</li>
+                    <li @click="$emit('filter', { type: 'author', value: 'Sun Tsu' })">Sun Tsu</li>
+                    <li @click="$emit('filter', { type: 'author', value: 'Lewis Carroll' })">Lewis Carroll</li>
+                    <li @click="$emit('filter', { type: 'author', value: 'Bram Stoker' })">Bram Stoker</li>
+                    <li @click="$emit('filter', { type: 'author', value: 'J.K. Rowling' })">J.K. Rowling</li>
+                    <li @click="$emit('filter', { type: 'author', value: 'J.R.R. Tolkien' })">J.R.R. Tolkien</li>
+                    <li @click="$emit('filter', { type: 'author', value: 'Herman Melville' })">Herman Melville</li>
+                    <li @click="$emit('filter', { type: 'author', value: 'L. Frank Baum' })">L. Frank Baum</li>
+                    <li @click="$emit('filter', { type: 'author', value: 'Antoine De Saint-Exupéry' })">Antoine De Saint-Exupéry</li>
                 </ul>
             </div>
 
@@ -47,14 +47,14 @@
                     <img src="../assets/icons/year-icon.png" alt="Anos Icon" class="title-icon" />
                 </div>
                 <ul class="filter-list">
-                    <li>2000+</li>
-                    <li>1980 - 1999</li>
-                    <li>1960 - 1979</li>
-                    <li>1930 - 1959</li>
-                    <li>1900 - 1929</li>
-                    <li>1800 - 1899</li>
-                    <li>1500 - 1799</li>
-                    <li>1499 -</li>
+                    <li @click="$emit('filter', { type: 'year', value: 2000 })">2000+</li>
+                    <li @click="$emit('filter', { type: 'year-range', value: [1980, 1999] })">1980 - 1999</li>
+                    <li @click="$emit('filter', { type: 'year-range', value: [1960, 1979] })">1960 - 1979</li>
+                    <li @click="$emit('filter', { type: 'year-range', value: [1930, 1959] })">1930 - 1959</li>
+                    <li @click="$emit('filter', { type: 'year-range', value: [1900, 1929] })">1900 - 1929</li>
+                    <li @click="$emit('filter', { type: 'year-range', value: [1800, 1899] })">1800 - 1899</li>
+                    <li @click="$emit('filter', { type: 'year-range', value: [1500, 1799] })">1500 - 1799</li>
+                    <li @click="$emit('filter', { type: 'year-below', value: 1499 })">1499 -</li>
                 </ul>
             </div>
 
