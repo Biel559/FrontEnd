@@ -23,25 +23,33 @@ res.status(500).json({ error: "Erro ao registrar usuário" }); // Responde com e
 };
 // Função para fazer login de usuários
 exports.login = async (req, res) => {
-     const { username, password } = req.body; // Pega dados do corpo da requisição
- 
-     try {
-         // Busca o usuário pelo nome de usuário
-         const user = await User.findOne({ username });
- 
-         if (!user) return res.status(400).json({ error: 'Usuário não encontrado' }); // Retorna erro
- 
-         // Compara a senha fornecida com a senha armazenada no banco
-         const isMatch = await bcrypt.compare(password, user.password);
- 
-         if (!isMatch) return res.status(400).json({ error: 'Senha incorreta' }); // Retorna erro se a senha não corresponder
- 
-         // Cria o token JWT para autenticação
-         const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' }); // Token expira em 1 hora
- 
-         res.json({ token }); // Responde com o token JWT
-     } catch (error) { 
-         console.error(error)
-         res.status(500).json({ error: 'Erro ao fazer login' }); // Responde com erro ao fazer login
-     }
- };
+    const { username, password } = req.body; // Pega dados do corpo da requisição
+
+    try {
+        // Busca o usuário pelo nome de usuário
+        const user = await User.findOne({ username });
+
+        if (!user) {
+            return res.status(400).json({ error: 'Usuário não encontrado' }); // Retorna erro
+        }
+
+        // Compara a senha fornecida com a senha armazenada no banco
+        const isMatch = await bcrypt.compare(password, user.password);
+
+        if (!isMatch) {
+            return res.status(400).json({ error: 'Senha incorreta' }); // Retorna erro se a senha não corresponder
+        }
+
+        // Cria o token JWT para autenticação
+        const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' }); // Token expira em 1 hora
+
+        // Inclui o ID do usuário na resposta
+        res.json({
+            token,         // Token JWT
+            userId: user._id, // ID do usuário
+        }); // Responde com o token e o ID do usuário
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Erro ao fazer login' }); // Responde com erro ao fazer login
+    }
+};

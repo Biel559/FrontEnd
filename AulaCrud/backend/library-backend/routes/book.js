@@ -4,6 +4,7 @@ const router = express.Router(); // Criamos o roteador
 const multer = require('multer'); // Importa o Multer
 const path = require('path'); // Para lidar com extensões de arquivos
 const fs = require('fs'); // Para verificar e criar diretórios
+const authMiddleware = require('../middlewares/authMiddleware'); // Importa o middleware
 
 // Verificar e criar o diretório 'uploads' se não existir
 const uploadsDir = path.join(__dirname, '../uploads');
@@ -117,38 +118,33 @@ router.delete('/:id', async (req, res) => {
   }
 });
 
-// *** ROTA PARA AVALIAR O LIVRO ***
-router.put('/:id/rate', async (req, res) => {
-  const { userId, rating } = req.body; // Recebe o ID do usuário e a avaliação
+// Rota para avaliar o livro
+router.put('/:id/rate', authMiddleware, async (req, res) => {
+  const { rating } = req.body;
 
-  // Verifica se a avaliação está entre 0 e 5
   if (rating < 0 || rating > 5) {
     return res.status(400).json({ message: 'A avaliação deve ser entre 0 e 5' });
   }
 
   try {
-    // Encontrar o livro
     const book = await Book.findById(req.params.id);
 
     if (!book) {
       return res.status(404).json({ message: 'Livro não encontrado' });
     }
 
-    // Verificar se o usuário já avaliou este livro
-    if (book.ratings.some(r => r.userId === userId)) {
+    if (book.ratings.some(r => r.userId === req.userId)) {
       return res.status(400).json({ message: 'Você já avaliou este livro' });
     }
 
-    // Adicionar a avaliação no array de ratings
-    book.ratings.push({ userId, rating });
+    book.ratings.push({ userId: req.userId, rating });
 
-    // Calcular a nova média de avaliação
     const totalRating = book.ratings.reduce((acc, r) => acc + r.rating, 0);
     book.rating = totalRating / book.ratings.length;
 
-    await book.save(); // Salva a nova avaliação e a média
+    await book.save();
 
-    res.status(200).json(book); // Retorna o livro com a nova avaliação e média
+    res.status(200).json(book);
   } catch (error) {
     res.status(500).json({ message: 'Erro ao avaliar livro', error });
   }

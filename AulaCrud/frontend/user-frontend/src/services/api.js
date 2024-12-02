@@ -35,8 +35,14 @@ export default {
 
   // PUT: Avaliar um livro
   rateBook(id, ratingData) {
-    return axios.put(`${BASE_URL}/${id}/rate`, ratingData);
-  },
+    const token = localStorage.getItem('token'); // Pega o token armazenado no localStorage
+  
+    return axios.put(`${BASE_URL}/${id}/rate`, ratingData, {
+      headers: {
+        'Authorization': `Bearer ${token}`, // Envia o token no cabeçalho
+      },
+    });
+  },  
 
   // PUT: Atualizar a quantidade de um livro
   updateBookQuantity(id, data) {

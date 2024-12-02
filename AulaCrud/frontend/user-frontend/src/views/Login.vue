@@ -41,14 +41,17 @@ export default {
           password: this.password,
         });
         this.message = 'Login bem-sucedido!';
+
+        // Armazena o token e o ID do usuário no localStorage
         localStorage.setItem('token', response.data.token);
-        this.$router.push('/home');
+        localStorage.setItem('userId', response.data.userId);
+
+        this.$router.push('/home'); // Redireciona para a página inicial
       } catch (error) {
-        this.message = error.response && error.response.data && error.response.data.message
-          ? error.response.data.message
-          : 'Erro ao fazer login.';
+        this.message = error.response?.data?.message || 'Erro ao fazer login.';
       }
     },
+
     // Método para redirecionar para App.vue
     goToApp() {
       this.$router.push('/app'); // Redireciona para a nova rota
@@ -64,14 +67,18 @@ export default {
 @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600&display=swap');
 
 /* Certifique-se de que body e html cobrem toda a tela */
-body, html {
+body,
+html {
   margin: 0;
   padding: 0;
   width: 100%;
   height: 100%;
-  background-color: #651F71; /* Define a cor de fundo */
-  overflow: hidden; /* Evita barras de rolagem indesejadas */
-  box-sizing: border-box; /* Inclui padding e bordas no tamanho do elemento */
+  background-color: #651F71;
+  /* Define a cor de fundo */
+  overflow: hidden;
+  /* Evita barras de rolagem indesejadas */
+  box-sizing: border-box;
+  /* Inclui padding e bordas no tamanho do elemento */
 }
 
 /* Garante que a div .login cobre toda a tela */
@@ -80,18 +87,25 @@ body, html {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-height: 100vh; /* Garante que cobre 100% da altura */
-  width: 100vw; /* Garante que cobre 100% da largura */
-  background-color: #651F71; /* Mesma cor de fundo para continuidade */
-  margin: 0; /* Remove qualquer margem extra */
-  padding: 0; /* Remove qualquer padding extra */
+  min-height: 100vh;
+  /* Garante que cobre 100% da altura */
+  width: 100vw;
+  /* Garante que cobre 100% da largura */
+  background-color: #651F71;
+  /* Mesma cor de fundo para continuidade */
+  margin: 0;
+  /* Remove qualquer margem extra */
+  padding: 0;
+  /* Remove qualquer padding extra */
 }
 
 .logo {
-  width:220px; /* Ajuste o tamanho da logo conforme necessário */
+  width: 220px;
+  /* Ajuste o tamanho da logo conforme necessário */
   height: auto;
   padding-left: 5px;
-  margin-bottom: 20px; /* Espaço entre a logo e o título */
+  margin-bottom: 20px;
+  /* Espaço entre a logo e o título */
 }
 
 h1 {
@@ -104,8 +118,10 @@ form {
   padding: 20px;
   border-radius: 8px;
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  width: 90%; /* Ajusta a largura relativa à tela */
-  max-width: 300px; /* Define um limite máximo */
+  width: 90%;
+  /* Ajusta a largura relativa à tela */
+  max-width: 300px;
+  /* Define um limite máximo */
   text-align: center;
 }
 
@@ -115,9 +131,12 @@ form {
   flex-direction: column;
   gap: 15px;
   position: relative;
-  color: black; /* Mudando a cor do texto para preto */
-  margin-bottom: 30px; /* Espaçamento entre os inputs */
-  margin-top: 20px;;
+  color: black;
+  /* Mudando a cor do texto para preto */
+  margin-bottom: 30px;
+  /* Espaçamento entre os inputs */
+  margin-top: 20px;
+  ;
 }
 
 .container .label {
@@ -130,30 +149,33 @@ form {
 }
 
 .input {
-  width: 96%; /* Ajuste para ocupar toda a largura do contêiner */
+  width: 96%;
+  /* Ajuste para ocupar toda a largura do contêiner */
   height: 45px;
   border: none;
   outline: none;
   padding: 0px 7px;
   border-radius: 6px;
-  color: #000000; /* Mantendo a cor do texto do input */
+  color: #000000;
+  /* Mantendo a cor do texto do input */
   font-size: 15px;
   background-color: transparent;
   box-shadow: 3px 3px 10px rgba(0, 0, 0, 1),
-              -1px -1px 6px rgba(255, 255, 255, 0.4);
+    -1px -1px 6px rgba(255, 255, 255, 0.4);
 }
 
 .input:focus {
   border: 2px solid transparent;
-  color: #000000; /* Mantendo a cor do texto do input em foco */
+  color: #000000;
+  /* Mantendo a cor do texto do input em foco */
   box-shadow: 3px 3px 10px rgba(0, 0, 0, 1),
-              -1px -1px 6px rgba(255, 255, 255, 0.4),
-              inset 3px 3px 10px rgba(0, 0, 0, 1),
-              inset -1px -1px 6px rgba(255, 255, 255, 0.4);
+    -1px -1px 6px rgba(255, 255, 255, 0.4),
+    inset 3px 3px 10px rgba(0, 0, 0, 1),
+    inset -1px -1px 6px rgba(255, 255, 255, 0.4);
 }
 
-.container .input:valid ~ .label,
-.container .input:focus ~ .label {
+.container .input:valid~.label,
+.container .input:focus~.label {
   transition: 0.3s;
   padding-left: 2px;
   transform: translateY(-35px);
@@ -162,9 +184,9 @@ form {
 .container .input:valid,
 .container .input:focus {
   box-shadow: 3px 3px 10px rgba(0, 0, 0, 1),
-              -1px -1px 6px rgba(255, 255, 255, 0.4),
-              inset 3px 3px 10px rgba(0, 0, 0, 1),
-              inset -1px -1px 6px rgba(255, 255, 255, 0.4);
+    -1px -1px 6px rgba(255, 255, 255, 0.4),
+    inset 3px 3px 10px rgba(0, 0, 0, 1),
+    inset -1px -1px 6px rgba(255, 255, 255, 0.4);
 }
 
 /* Estilos aplicados apenas ao botão de Login (em cima dos inputs) */

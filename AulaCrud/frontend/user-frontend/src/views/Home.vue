@@ -34,17 +34,17 @@
             <button class="reset-button" @click="resetFilters">Reset Filters</button>
             <h1 class="title">All Books</h1>
             <img src="../assets/icons/e-book.png" alt="E-Book Icon" class="title-icon" />
+            <!-- Botão de Logout -->
+            <button class="logout-button" @click="logoutUser">Logout</button>
           </div>
+
+
+
 
           <div class="book-grid">
             <transition-group name="fade" tag="div" class="book-grid">
-  <BookCard 
-    v-for="(book) in filteredBooks" 
-    :key="book._id" 
-    :book="book" 
-    @reserve="goToBook" 
-  />
-</transition-group>
+              <BookCard v-for="(book) in filteredBooks" :key="book._id" :book="book" @reserve="goToBook" />
+            </transition-group>
 
 
           </div>
@@ -134,6 +134,10 @@ export default {
     resetFilters() {
       this.filteredBooks = this.books; // Reseta a lista filtrada para todos os livros
       this.searchQuery = ''; // Limpa o texto da barra de pesquisa, se necessário
+    },
+    logoutUser() {
+      localStorage.removeItem('token'); // Remove o token
+      this.$router.push('/login'); // Redireciona para a tela de login
     },
   },
   mounted() {
@@ -366,33 +370,53 @@ html {
   height: 95px;
 }
 
+.logout-button {
+  font-family: 'Inika',serif;
+  background-color: #f44336; /* Vermelho */
+  color: white;
+  border: none;
+  padding: 10px;
+  cursor: pointer;
+  border-radius: 5px;
+  font-size: 14px;
+}
+.logout-button:hover {
+  background-color: #d32f2f; /* Vermelho mais escuro */
+}
+
 .book-grid {
   padding-left: 175px;
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  column-gap: 280px; /* Distância horizontal entre os cards */
-  row-gap: 50px; /* Distância vertical entre os cards (ajuste conforme necessário) */
+  column-gap: 280px;
+  /* Distância horizontal entre os cards */
+  row-gap: 50px;
+  /* Distância vertical entre os cards (ajuste conforme necessário) */
   background-color: #68B2F8;
   padding-top: 15px;
 }
 
 .book-grid .fade-enter-active,
 .book-grid .fade-leave-active {
-  transition: opacity 1s ease, transform 1s ease; /* Aumente a duração para 1s */
+  transition: opacity 1s ease, transform 1s ease;
+  /* Aumente a duração para 1s */
 }
 
-.book-grid .fade-enter, 
-.book-grid .fade-leave-to /* .fade-leave-to é necessário para a animação de saída */
-{
+.book-grid .fade-enter,
+.book-grid .fade-leave-to
+
+/* .fade-leave-to é necessário para a animação de saída */
+  {
   opacity: 0;
-  transform: translateY(20px); /* Aplique a transformação */
+  transform: translateY(20px);
+  /* Aplique a transformação */
 }
 
-.book-grid .fade-enter-to /* Este é o estado após a entrada */
-{
+.book-grid .fade-enter-to
+
+/* Este é o estado após a entrada */
+  {
   opacity: 1;
   transform: translateY(0);
 }
-
-
 </style>

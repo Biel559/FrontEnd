@@ -3,11 +3,15 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const path = require('path');
 
+require('dotenv').config(); // Carrega as variáveis de ambiente do arquivo .env
+
 // Inicialização do app
 const app = express();
 
-// Configuração do CORS
-app.use(cors());
+app.use(cors({
+  origin: 'http://localhost:8080', // Substitua com a URL correta do seu frontend
+  methods: ['GET', 'POST', 'PUT', 'DELETE'], // Adicione os métodos que você está utilizando
+}));
 
 // Para fazer o parsing do corpo das requisições em JSON
 app.use(express.json());
