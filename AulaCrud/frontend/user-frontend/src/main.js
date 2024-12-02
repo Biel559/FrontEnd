@@ -3,6 +3,10 @@ import App from './App.vue'; // Componente raiz
 import './assets/dashboard.css'; // CSS global
 import router from './router'; // Configuração de rotas
 import api from './axios'; // Instância Axios personalizada
+import { Chart as ChartJS, registerables } from 'chart.js';
+
+// Registrar todos os componentes necessários para os gráficos
+ChartJS.register(...registerables);
 
 const app = createApp(App); // Cria a instância do aplicativo
 

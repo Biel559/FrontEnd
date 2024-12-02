@@ -161,6 +161,53 @@ router.put('/:id/quantity', (req, res) => {
     .catch((err) => res.status(500).json({ error: 'Failed to update quantity', err }));
 });
 
+// Rota para fornecer dados dos gráficos
+router.get('/charts-data', async (req, res) => {
+  try {
+    // **Top 5 livros mais bem avaliados**
+    const topRatedBooks = await Book.find()
+      .sort({ rating: -1 })
+      .limit(5)
+      .select('title rating');
+
+    // **Quantidade de livros por gênero (correção para separar os gêneros)**
+    const allBooks = await Book.find({}, 'genre'); // Busca apenas o campo `genre`
+
+    const genreCounts = {};
+
+    allBooks.forEach((book) => {
+      const genres = book.genre.split(',').map((g) => g.trim()); // Separa e remove espaços
+      genres.forEach((genre) => {
+        genreCounts[genre] = (genreCounts[genre] || 0) + 1; // Incrementa o contador
+      });
+    });
+
+    const genres = Object.keys(genreCounts).map((key) => ({
+      name: key,
+      count: genreCounts[key],
+    }));
+
+    // **Top 5 autores com mais livros**
+    const topAuthors = await Book.aggregate([
+      { $group: { _id: '$author', count: { $sum: 1 } } },
+      { $sort: { count: -1 } },
+      { $limit: 5 },
+      { $project: { name: '$_id', count: 1, _id: 0 } },
+    ]);
+
+    res.status(200).json({
+      topRatedBooks: topRatedBooks.map((book) => ({
+        title: book.title,
+        reviews: book.rating,
+      })),
+      genres,
+      topAuthors,
+    });
+  } catch (error) {
+    console.error("Erro ao buscar dados para os gráficos:", error);
+    res.status(500).json({ message: 'Erro ao buscar dados para os gráficos', error });
+  }
+});
 
 // Exportamos o roteador para ser usado no server.js
 module.exports = router;

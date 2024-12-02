@@ -23,7 +23,7 @@
       </div>
       <div class="nav-icons">
         <a href="#crud" class="icon"><img src="../assets/dashboardImg/crud.png" alt="" @click="goToApp"></a>
-        <a href="#graficos" class="icon"><img src="../assets/dashboardImg/chart.png" alt=""></a>
+        <a href="#graficos" class="icon"><img src="../assets/dashboardImg/chart.png" alt="" @click="goToChart"></a>
         <a href="#notificacoes" class="icon"><img src="../assets/dashboardImg/notification.png" alt=""></a>
         <a href="#configuracoes" class="icon"><img src="../assets/dashboardImg/config.png" alt=""></a>
       </div>
@@ -65,6 +65,9 @@ export default {
     },
     goToHome() {
       this.$router.push('/home');
+    },
+    goToChart() {
+      this.$router.push('/chart'); // Redireciona para a nova rota
     },
   },
   mounted() {

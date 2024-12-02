@@ -9,9 +9,13 @@
   },
   "dependencies": {
     "axios": "^1.7.7",
+    "chart.js": "^3.9.1",
     "core-js": "^3.8.3",
+    "html2canvas": "^1.4.1",
+    "jspdf": "^2.5.2",
     "user-frontend": "file:",
     "vue": "^3.2.13",
+    "vue-chart-3": "^3.1.8",
     "vue-router": "^4.0.13"
   },
   "devDependencies": {

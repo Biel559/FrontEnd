@@ -4,6 +4,7 @@ import Home from '../views/Home.vue';
 import Crud from '../views/Crud.vue'; // Importa o componente App
 import Cadastro from '@/views/Cadastro.vue';
 import Book from '../views/Book.vue'
+import Chart from '../views/Chart.vue'
 
 const routes = [
   {
@@ -26,6 +27,11 @@ const routes = [
     path: '/cadastro', // Nova rota para Cadastro.vue
     name: 'Cadastro',
     component: Cadastro,
+  },
+  {
+    path: '/chart', // Nova rota para Cadastro.vue
+    name: 'Chart',
+    component: Chart,
   },
   {
     path: '/:catchAll(.*)', // Usando a nova sintaxe para rotas coringa
@@ -60,6 +66,9 @@ router.beforeEach((to, from, next) => {
     document.body.style.backgroundColor = '#68B2F8'; // Fundo para Dashboard
   }
   else if (to.name === 'Book') {
+    document.body.style.backgroundColor = '#68B2F8'; // Fundo para Dashboard
+  }
+  else if (to.name === 'Chart') {
     document.body.style.backgroundColor = '#68B2F8'; // Fundo para Dashboard
   }
   else {

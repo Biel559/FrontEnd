@@ -47,5 +47,10 @@ export default {
   // PUT: Atualizar a quantidade de um livro
   updateBookQuantity(id, data) {
     return axios.put(`${BASE_URL}/${id}/quantity`, data);
-  }  
+  },
+
+  // GET: Obter dados para os gráficos
+  getChartData() {
+    return axios.get(`${BASE_URL}/charts-data`);
+  },
 };
