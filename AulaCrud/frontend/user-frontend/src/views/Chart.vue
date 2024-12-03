@@ -1,5 +1,28 @@
 <template>
   <div class="charts-page">
+    <nav class="navbar">
+            <div class="logo">
+                <a href=""><img src="../assets/dashboardImg/logoIllumine.png" alt="Logo" @click="goToHome" /></a>
+            </div>
+            <div class="InputContainer">
+                <input placeholder="Search for a book..." id="input" class="input" name="text" type="text"
+                    v-model="searchQuery" @input="filterBooks" />
+
+                <label class="labelforsearch" for="input">
+                    <svg class="searchIcon" viewBox="0 0 512 512">
+                        <path
+                            d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z">
+                        </path>
+                    </svg>
+                </label>
+            </div>
+            <div class="nav-icons">
+                <a href="#crud" class="icon"><img src="../assets/dashboardImg/crud.png" alt="" @click="goToApp" /></a>
+                <a href="#graficos" class="icon"><img src="../assets/dashboardImg/chart.png" alt="" @click="goToChart"/></a>
+                <a href="#notificacoes" class="icon"><img src="../assets/dashboardImg/notification.png" alt="" /></a>
+                <a href="#configuracoes" class="icon"><img src="../assets/dashboardImg/config.png" alt="" /></a>
+            </div>
+        </nav>
     <div class="charts-grid">
       <div v-if="topRatedBooksData" class="chart-box">
         <h3 class="chart-title">Top 5 Rated Books</h3>
@@ -12,7 +35,7 @@
         <div v-if="genresData" class="chart-box-genre">
           <PieChart :data="genresData" />
         </div>
-      </div>
+      </div> 
       <div v-else>Loading Genres...</div>
 
       <div v-if="authorsData" class="chart-box">
@@ -43,6 +66,7 @@
 
 <script>
 import { ref, onMounted } from 'vue';
+import { useRouter } from 'vue-router'; // Importação do useRouter
 import BarChart from '../components/BarChart.vue';
 import PieChart from '../components/PieChart.vue';
 import jsPDF from 'jspdf';
@@ -55,22 +79,39 @@ export default {
     PieChart,
   },
   setup() {
+    const router = useRouter(); // Inicialização do router
     const topRatedBooksData = ref(null);
     const genresData = ref(null);
     const authorsData = ref(null);
+
+    const goToHome = () => {
+      router.push('/home'); // Redireciona para Home.vue
+    };
+
+    const goToApp = () => {
+      router.push('/crud'); // Redireciona para Home.vue
+    };
 
     const fetchChartData = async () => {
       try {
         const { data } = await api.getChartData();
         if (data) {
           if (data.topRatedBooks && Array.isArray(data.topRatedBooks)) {
+            const colors = [
+              'rgba(255, 99, 132, 0.6)',
+              'rgba(54, 162, 235, 0.6)',
+              'rgba(255, 206, 86, 0.6)',
+              'rgba(75, 192, 192, 0.6)',
+              'rgba(153, 102, 255, 0.6)',
+            ];
+
             topRatedBooksData.value = {
               labels: data.topRatedBooks.map((book) => book.title),
               datasets: [
                 {
                   label: "Reviews",
                   data: data.topRatedBooks.map((book) => book.reviews),
-                  backgroundColor: "rgba(75, 192, 192, 0.6)",
+                  backgroundColor: colors.slice(0, data.topRatedBooks.length),
                 },
               ],
             };
@@ -78,28 +119,12 @@ export default {
 
           if (data.genres && Array.isArray(data.genres)) {
             const colors = [
-              'rgba(255, 99, 132, 0.6)', // Vermelho
-              'rgba(54, 162, 235, 0.6)', // Azul
-              'rgba(255, 206, 86, 0.6)', // Amarelo
-              'rgba(75, 192, 192, 0.6)', // Verde
-              'rgba(153, 102, 255, 0.6)', // Roxo
-              'rgba(255, 159, 64, 0.6)', // Laranja
-              'rgba(255, 99, 71, 0.6)', // Tomate
-              'rgba(255, 165, 0, 0.6)', // Laranja escuro
-              'rgba(0, 255, 255, 0.6)', // Ciano
-              'rgba(255, 105, 180, 0.6)', // Hot pink
-              'rgba(0, 255, 0, 0.6)', // Verde claro
-              'rgba(0, 0, 255, 0.6)', // Azul claro
-              'rgba(128, 0, 128, 0.6)', // Roxo escuro
-              'rgba(255, 69, 0, 0.6)', // Laranja avermelhado
-              'rgba(124, 252, 0, 0.6)', // Verde limão
-              'rgba(173, 216, 230, 0.6)', // Azul claro pastel
-              'rgba(255, 20, 147, 0.6)', // Deep pink
-              'rgba(210, 105, 30, 0.6)', // Chocolate
-              'rgba(32, 178, 170, 0.6)', // Turquesa
-              'rgba(255, 228, 181, 0.6)', // Mocca
-              'rgba(255, 223, 0, 0.6)', // Amarelo dourado
-              'rgba(169, 169, 169, 0.6)', // Cinza claro
+              'rgba(255, 99, 132, 0.6)',
+              'rgba(54, 162, 235, 0.6)',
+              'rgba(255, 206, 86, 0.6)',
+              'rgba(75, 192, 192, 0.6)',
+              'rgba(153, 102, 255, 0.6)',
+              'rgba(255, 159, 64, 0.6)',
             ];
 
             genresData.value = {
@@ -108,21 +133,28 @@ export default {
                 {
                   label: "Books",
                   data: data.genres.map((genre) => genre.count),
-                  backgroundColor: colors.slice(0, data.genres.length), // Ajusta as cores para o número de gêneros
+                  backgroundColor: colors.slice(0, data.genres.length),
                 },
               ],
             };
           }
 
-
           if (data.topAuthors && Array.isArray(data.topAuthors)) {
+            const colors = [
+              'rgba(75, 192, 192, 0.6)',
+              'rgba(255, 206, 86, 0.6)',
+              'rgba(153, 102, 255, 0.6)',
+              'rgba(54, 162, 235, 0.6)',
+              'rgba(255, 99, 132, 0.6)',
+            ];
+
             authorsData.value = {
               labels: data.topAuthors.map((author) => author.name),
               datasets: [
                 {
                   label: "Books",
                   data: data.topAuthors.map((author) => author.count),
-                  backgroundColor: "rgba(255, 159, 64, 0.6)",
+                  backgroundColor: colors.slice(0, data.topAuthors.length),
                 },
               ],
             };
@@ -155,11 +187,12 @@ export default {
       genresData,
       authorsData,
       generatePDF,
+      goToHome, // Retorna o método para uso no template
+      goToApp,
     };
   },
 };
 </script>
-
 
 <style scoped>
 .charts-page {
@@ -352,7 +385,7 @@ export default {
 }
 
 .report-image {
-  max-width: 30%;
+  max-width: 24%;
   /* Define o tamanho da imagem */
   height: auto;
   margin-right: 20px;
@@ -391,6 +424,7 @@ export default {
   /* Mantém 2 colunas */
   gap: 80px;
   /* Define o espaço entre as boxes */
+  margin-top: 120px;
 }
 
 

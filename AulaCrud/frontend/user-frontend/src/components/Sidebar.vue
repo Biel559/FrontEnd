@@ -29,7 +29,7 @@
                     <img src="../assets/icons/author-icon.png" alt="Autores Icon" class="title-icon" />
                 </div>
                 <ul class="filter-list">
-                    <li @click="$emit('filter', { type: 'author', value: 'Sun Tsu' })">Sun Tsu</li>
+                    <li @click="$emit('filter', { type: 'author', value: 'Sun Tzu' })">Sun Tzu</li>
                     <li @click="$emit('filter', { type: 'author', value: 'Lewis Carroll' })">Lewis Carroll</li>
                     <li @click="$emit('filter', { type: 'author', value: 'Bram Stoker' })">Bram Stoker</li>
                     <li @click="$emit('filter', { type: 'author', value: 'J.K. Rowling' })">J.K. Rowling</li>
