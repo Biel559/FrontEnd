@@ -1,30 +1,38 @@
 require('dotenv').config(); // Carrega variáveis de ambiente do arquivo .env
 
-const express = require('express'); // Importa o Express, um framework para criar APIs
-const mongoose = require('mongoose'); // Importa o Mongoose para conectar e interagir com o MongoDB
+const express = require('express'); // Importa o Express
+const mongoose = require('mongoose'); // Importa o Mongoose para conectar ao MongoDB
 const cors = require('cors'); // Importa o middleware CORS
+const jwt = require('jsonwebtoken'); // Para autenticação com JWT
 
 const app = express(); // Inicializa uma aplicação Express
-const authRoutes = require('./routes/authRoutes'); // Importa as rotas de autenticação
+const authRoutes = require('./routes/authRoutes'); // Rotas de autenticação
+const authorizeRoles = require('./middlewares/authorizeRoles'); // Middleware de roles
+const authenticate = require('./middlewares/authenticate'); // Middleware de autenticação
 
+// Middleware global para habilitar CORS e JSON
 app.use(cors({
     origin: 'http://localhost:8080', // Permite requisições apenas do seu frontend
     methods: ['GET', 'POST'], // Adicione outros métodos se necessário
 }));
-
 app.use(express.json()); // Middleware para processar requisições JSON
 
-// Configura as rotas de autenticação para o caminho /api/auth
+// Rota de autenticação
 app.use('/api/auth', authRoutes);
 
-// Conecta o banco de dados MongoDB usando a string de conexão armazenada em variáveis de ambiente
+// Rota protegida (exemplo)
+app.get('/api/protected', authenticate, authorizeRoles('librarian'), (req, res) => {
+    res.json({ message: "Bem-vindo ao dashboard" });
+});
+
+// Conecta ao banco de dados MongoDB
 mongoose.connect(process.env.MONGO_URI, {
-    useNewUrlParser: true, // Usa o novo parser de URL do MongoDB
-    useUnifiedTopology: true, // Usa o novo mecanismo de gerenciamento de conexões
+    useNewUrlParser: true,
+    useUnifiedTopology: true,
 })
-.then(() => console.log('Conectado ao MongoDB')) // Se conectar com sucesso, exibe mensagem no console
-.catch((error) => console.error('Erro ao conectar ao MongoDB:', error)); // Se falhar, exibe mensagem de erro
+    .then(() => console.log('Conectado ao MongoDB'))
+    .catch((error) => console.error('Erro ao conectar ao MongoDB:', error));
 
-const PORT = process.env.PORT || 5000; // Define a porta do servidor, usando variável de ambiente ou padrão 5000
-
-app.listen(PORT, () => console.log(`Servidor rodando na porta ${PORT}`)); // Inicia o servidor e exibe mensagem no console
+// Inicializa o servidor
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => console.log(`Servidor rodando na porta ${PORT}`));

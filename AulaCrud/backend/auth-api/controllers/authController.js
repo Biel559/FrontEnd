@@ -1,26 +1,42 @@
-const User = require('../models/user')
+const User = require('../models/user');
 const bcrypt = require('bcryptjs'); // Importa bcrypt para hash de senhas
-const jwt = require('jsonwebtoken'); // Importa jsonvebtoken para criar tokens JWT
- 
+const jwt = require('jsonwebtoken'); // Importa jsonwebtoken para criar tokens JWT
+
 // Função para registrar novos usuários
-
 exports.register = async (req, res) => {
-const { username, password } = req.body; // Pega dados do corpo da requisição
+    const { username, password, role, matriculationId, course, semester } = req.body;
 
-try{
-// Criptografa a senha antes de salvar no banco
-const hashedPassword = await bcrypt.hash(password, 10); // O número 10 representa o "salt rounds" para tornar o hash mais seguro
+    try {
+        // Criptografa a senha antes de salvar no banco
+        const hashedPassword = await bcrypt.hash(password, 10);
 
-// Cria um novo usuário com nome de usuário e senha criptografada
-const newUser = new User({ username, password: hashedPassword });
-await newUser.save(); // Salva o usuário no banco de dados 
-res.status(201).json({ message: 'Usuário registrado com sucesso' }); // Responde com sucesso ao registrar
+        // Verificação para campos obrigatórios se o usuário for estudante
+        if (role === 'student') {
+            if (!matriculationId || !course || !semester) {
+                return res.status(400).json({ error: 'Matriculation ID, Course, and Semester are required for students.' });
+            }
+        }
 
- } catch (error) {
-res.status(500).json({ error: "Erro ao registrar usuário" }); // Responde com erro ao registrar
-}
+        // Cria um novo usuário com os dados fornecidos
+        const newUser = new User({
+            username,
+            password: hashedPassword,
+            role: role || 'student',  // Caso não tenha role, o padrão é 'student'
+            matriculationId,
+            course,
+            semester
+        });
 
+        // Salva o novo usuário no banco de dados
+        await newUser.save();
+
+        res.status(201).json({ message: 'Usuário registrado com sucesso' });
+    } catch (error) {
+        console.error(error);  // Log de erro no console do servidor
+        res.status(500).json({ error: `Erro ao registrar usuário: ${error.message}` }); // Mensagem de erro
+    }
 };
+
 // Função para fazer login de usuários
 exports.login = async (req, res) => {
     const { username, password } = req.body; // Pega dados do corpo da requisição
@@ -41,13 +57,18 @@ exports.login = async (req, res) => {
         }
 
         // Cria o token JWT para autenticação
-        const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' }); // Token expira em 1 hora
+        const token = jwt.sign(
+            { id: user._id, role: user.role }, // Inclui o role no token
+            process.env.JWT_SECRET,
+            { expiresIn: '1h' } // Token expira em 1 hora
+        );
 
-        // Inclui o ID do usuário na resposta
+        // Responde com o token e os dados do usuário
         res.json({
             token,         // Token JWT
             userId: user._id, // ID do usuário
-        }); // Responde com o token e o ID do usuário
+            role: user.role,  // Role do usuário
+        });
     } catch (error) {
         console.error(error);
         res.status(500).json({ error: 'Erro ao fazer login' }); // Responde com erro ao fazer login
