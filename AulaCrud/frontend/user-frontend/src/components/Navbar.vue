@@ -1,42 +1,51 @@
 <template>
-    <nav class="navbar">
-      <div class="logo">
-        <a href=""><img src="../assets/dashboardImg/logoIllumine.png" alt="Logo" @click="goToHome" /></a>
-      </div>
-      <div class="InputContainer">
-        <input
-          placeholder="Search for a book..."
-          id="input"
-          class="input"
-          name="text"
-          type="text"
-          v-model="searchQuery"
-          @input="filterBooks"
-        />
-        <label class="labelforsearch" for="input">
-          <svg class="searchIcon" viewBox="0 0 512 512">
-            <path
-              d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z"
-            ></path>
-          </svg>
-        </label>
-      </div>
-      <div class="nav-icons">
-        <a href="#userCrud" class="icon"><img src="../assets/dashboardImg/account.png" alt="" @click="goToUserCrud" /></a>
-        <a href="#crud" class="icon"><img src="../assets/dashboardImg/crud.png" alt="" @click="goToApp" /></a>
-        <a href="#graficos" class="icon"><img src="../assets/dashboardImg/chart.png" alt="" @click="goToChart" /></a>
-        <a href="#notificacoes" class="icon"><img src="../assets/dashboardImg/notification.png" alt="" /></a>
-        <a href="#configuracoes" class="icon"><img src="../assets/dashboardImg/config.png" alt="" @click="goToConfig" /></a>
-      </div>
-    </nav>
-  </template>
-  
-  <script>
+  <nav class="navbar">
+    <div class="logo">
+      <a href=""><img src="../assets/dashboardImg/logoIllumine.png" alt="Logo" @click="goToHome" /></a>
+    </div>
+    <div class="InputContainer">
+      <input
+        placeholder="Search for a book..."
+        id="input"
+        class="input"
+        name="text"
+        type="text"
+        v-model="searchQuery"
+        @input="filterBooks"
+      />
+      <label class="labelforsearch" for="input">
+        <svg class="searchIcon" viewBox="0 0 512 512">
+          <path
+            d="M416 208c0 45.9-14.9 88.3-40 122.7L502.6 457.4c12.5 12.5 12.5 32.8 0 45.3s-32.8 12.5-45.3 0L330.7 376c-34.4 25.2-76.8 40-122.7 40C93.1 416 0 322.9 0 208S93.1 0 208 0S416 93.1 416 208zM208 352a144 144 0 1 0 0-288 144 144 0 1 0 0 288z"
+          ></path>
+        </svg>
+      </label>
+    </div>
+    <div class="nav-icons">
+      <a v-if="isLibrarianOrAdmin" href="#userCrud" class="icon"><img src="../assets/dashboardImg/account.png" alt="" @click="goToUserCrud" /></a>
+      <a v-if="isLibrarianOrAdmin" href="#crud" class="icon"><img src="../assets/dashboardImg/crud.png" alt="" @click="goToApp" /></a>
+      <a v-if="isLibrarian" href="#graficos" class="icon"><img src="../assets/dashboardImg/chart.png" alt="" @click="goToChart" /></a>
+      <a href="#notificacoes" class="icon"><img src="../assets/dashboardImg/notification.png" alt="" /></a>
+      <a href="#configuracoes" class="icon"><img src="../assets/dashboardImg/config.png" alt="" @click="goToConfig" /></a>
+    </div>
+  </nav>
+</template>
+
+<script>
 export default {
   data() {
     return {
       searchQuery: '',
+      role: localStorage.getItem('role') || 'student', // Pega a role do usuário
     };
+  },
+  computed: {
+    isLibrarianOrAdmin() {
+      return this.role === 'librarian' || this.role === 'admin';
+    },
+    isLibrarian() {
+      return this.role === 'librarian';
+    },
   },
   methods: {
     goToHome() {
@@ -60,6 +69,7 @@ export default {
   },
 };
 </script>
+
   
   <style scoped>
 .navbar {

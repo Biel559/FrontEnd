@@ -1,61 +1,80 @@
 <template>
-    <div class="login">
-      <img src="../assets/IllumineLogo.png" alt="Logo da Biblioteca" class="logo" />
-      <button class="button login-title-button" data-text="Login">
-        <span class="actual-text">&nbsp;SignUp&nbsp;</span>
-        <span aria-hidden="true" class="hover-text">&nbsp;SignUp&nbsp;</span>
-      </button> 
-  
-      <form @submit.prevent="criarUser">
-        <div class="container">
-          <input v-model="username" type="text" name="text" class="input" required />
-          <label class="label">Enter your profile name</label>
-        </div>
-        <div class="container">
-          <input v-model="password" type="password" name="password" class="input" required />
-          <label class="label">Create a password</label>
-        </div>
-        <button class="form-submit-button" @click="goToLogin" type="button">Back</button>
-        <button class="form-submit-button" type="submit">Create Account</button>
-      </form>
-      <p v-if="message">{{ message }}</p> <!-- Mensagem de erro ou sucesso -->
-    </div>
-  </template>
-  
-  <script>
-  import api from '../axios';
-  
-  export default {
-    data() {
-      return {
-        username: '',
-        password: '',
-        message: ''
-      };
-    },
-    methods: {
-      async criarUser() {
-        try {
-          const response = await api.post('/auth/register', {
-            username: this.username,
-            password: this.password,
-          });
-          this.message = 'Conta criada com sucesso!';
-          localStorage.setItem('token', response.data.token);
-          this.$router.push('/login');
-        } catch (error) {
-          this.message = error.response && error.response.data && error.response.data.message
+  <div class="login">
+    <img src="../assets/IllumineLogo.png" alt="Logo da Biblioteca" class="logo" />
+    <button class="button login-title-button" data-text="Login">
+      <span class="actual-text">&nbsp;SignUp&nbsp;</span>
+      <span aria-hidden="true" class="hover-text">&nbsp;SignUp&nbsp;</span>
+    </button>
+
+    <form @submit.prevent="criarUser">
+      <div class="container">
+        <input v-model="username" type="text" name="text" class="input" required />
+        <label class="label">Enter your profile name</label>
+      </div>
+      <div class="container">
+        <input v-model="password" type="password" name="password" class="input" required />
+        <label class="label">Create a password</label>
+      </div>
+      <div class="container">
+        <input v-model="matriculationId" type="text" class="input" required />
+        <label class="label">Enter your Matriculation ID</label>
+      </div>
+      <div class="container">
+        <input v-model="course" type="text" class="input" required />
+        <label class="label">Enter your Course</label>
+      </div>
+      <div class="container">
+        <input v-model="semester" type="text" class="input" required />
+        <label class="label">Enter your Semester</label>
+      </div>
+      <button class="form-submit-button" @click="goToLogin" type="button">Back</button>
+      <button class="form-submit-button" type="submit">Create Account</button>
+    </form>
+    <p v-if="message">{{ message }}</p> <!-- Mensagem de erro ou sucesso -->
+  </div>
+</template>
+
+<script>
+import api from "../axios";
+
+export default {
+  data() {
+    return {
+      username: "",
+      password: "",
+      matriculationId: "",
+      course: "",
+      semester: "",
+      message: ""
+    };
+  },
+  methods: {
+    async criarUser() {
+      try {
+        const response = await api.post("/auth/register", {
+          username: this.username,
+          password: this.password,
+          matriculationId: this.matriculationId,
+          course: this.course,
+          semester: this.semester,
+          role: "student" // Define a role como Student
+        });
+        this.message = "Conta criada com sucesso!";
+        localStorage.setItem("token", response.data.token);
+        this.$router.push("/login");
+      } catch (error) {
+        this.message =
+          error.response && error.response.data && error.response.data.message
             ? error.response.data.message
-            : 'Erro ao criar conta.';
-        }
-      },
-      // Método para redirecionar para App.vue
-      goToLogin() {
-        this.$router.push('/login'); // Redireciona para a nova rota
-      },
+            : "Erro ao criar conta.";
+      }
+    },
+    goToLogin() {
+      this.$router.push("/login"); // Redireciona para a rota de login
     }
-  };
-  </script>
+  }
+};
+</script>
   <style scoped>
   @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600&display=swap');
   

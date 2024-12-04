@@ -35,22 +35,25 @@ export default {
   },
   methods: {
     async loginUser() {
-      try {
-        const response = await api.post('/auth/login', {
-          username: this.username,
-          password: this.password,
-        });
-        this.message = 'Login bem-sucedido!';
+  try {
+    const response = await api.post('/auth/login', {
+      username: this.username,
+      password: this.password,
+    });
 
-        // Armazena o token e o ID do usuário no localStorage
-        localStorage.setItem('token', response.data.token);
-        localStorage.setItem('userId', response.data.userId);
+    this.message = 'Login bem-sucedido!';
 
-        this.$router.push('/home'); // Redireciona para a página inicial
-      } catch (error) {
-        this.message = error.response?.data?.message || 'Erro ao fazer login.';
-      }
-    },
+    // Armazena o token, ID do usuário e role no localStorage
+    localStorage.setItem('token', response.data.token);
+    localStorage.setItem('userId', response.data.userId);
+    localStorage.setItem('role', response.data.role); // Armazena a role do usuário
+
+    this.$router.push('/home'); // Redireciona para a página inicial
+  } catch (error) {
+    this.message = error.response?.data?.message || 'Erro ao fazer login.';
+  }
+},
+
 
     // Método para redirecionar para App.vue
     goToApp() {
