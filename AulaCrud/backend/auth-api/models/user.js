@@ -37,18 +37,20 @@ const userSchema = new mongoose.Schema({
     type: [{ bookId: mongoose.Schema.Types.ObjectId, reservedAt: Date }], // Livros reservados
     default: []
   },
-  reservationLimit: { type: Number, default: 3 } // Limite de reservas
+  reservationLimit: { type: Number, default: 3 }, // Limite de reservas
+  isActive: { type: Boolean, default: true }, // Indica se a conta está ativa ou desativada
 }, {
   timestamps: true // Adiciona 'createdAt' e 'updatedAt' automaticamente
 });
 
-// Middleware para validação antes de salvar
 userSchema.pre('save', function (next) {
   if (this.role === 'student') {
-    // Garante que os campos sejam fornecidos quando role for 'student'
-    if (!this.matriculationId || !this.course || !this.semester) {
-      const err = new Error('Matriculation ID, Course, and Semester are required for students.');
-      return next(err);
+    // Valida somente na criação ou alteração dos campos dependentes
+    if (this.isNew || this.isModified('matriculationId') || this.isModified('course') || this.isModified('semester')) {
+      if (!this.matriculationId || !this.course || !this.semester) {
+        const err = new Error('Matriculation ID, Course, and Semester are required for students.');
+        return next(err);
+      }
     }
   }
   next();

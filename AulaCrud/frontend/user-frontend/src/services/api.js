@@ -28,6 +28,16 @@ export default {
     });
   },
 
+  // PUT: Diminuir a quantidade de um livro
+  decreaseBookQuantity(id, decreaseBy) {
+    return axios.put(`${BASE_URL}/${id}/decrease-quantity`, { decreaseBy });
+  },
+
+  // PUT: Aumentar a quantidade de um livro
+  increaseBookQuantity(id, increaseBy) {
+    return axios.put(`${BASE_URL}/${id}/increase-quantity`, { increaseBy });
+  },
+
   // DELETE: Remover um livro pelo ID
   deleteBook(id) {
     return axios.delete(`${BASE_URL}/${id}`);

@@ -54,10 +54,11 @@
     </div>
 </template>
 
-<script>
+<script> 
 import Sidebar from '../components/Sidebar.vue';
 import Navbar from '../components/Navbar.vue';
-import api from '../services/api'; // Importa a API para interações com o backend
+import apiLibrary from '../services/api'; // Importa API do library-backend
+import apiAuth from '../axios'; // Importa API do auth-api
 
 export default {
     components: {
@@ -82,7 +83,7 @@ export default {
         async fetchBookDetails() {
             const bookId = this.$route.params.id;
             try {
-                const response = await api.getBooks();
+                const response = await apiLibrary.getBooks();
                 const book = response.data.find((b) => b._id === bookId);
                 if (book) {
                     this.book = {
@@ -129,7 +130,7 @@ export default {
                 const token = localStorage.getItem('token');
                 console.log('Token enviado:', token); // Verifique se o token está correto
 
-                const response = await api.rateBook(this.book._id, {
+                const response = await apiLibrary.rateBook(this.book._id, {
                     rating: this.userRating,
                 }, {
                     headers: {
@@ -148,10 +149,38 @@ export default {
 
         },
 
-        reserveBook() {
-            console.log(`Livro reservado: ${this.book.title}`);
-            // Aqui você pode adicionar lógica para a reserva/emprestimo
-        },
+        async reserveBook() {
+    const bookId = this.book._id;
+    const token = localStorage.getItem('token'); // Recupera o token de autenticação
+
+    try {
+        // Reduzir a quantidade do livro no library-backend
+        const decreaseResponse = await apiLibrary.decreaseBookQuantity(bookId, 1);
+        console.log('Quantidade reduzida com sucesso:', decreaseResponse.data);
+
+        // Reservar o livro no auth-api
+        const reserveResponse = await apiAuth.post('/auth/reserve',
+            { bookId },
+            { headers: { Authorization: `Bearer ${token}` } }
+        );
+        console.log('Livro reservado com sucesso:', reserveResponse.data);
+        alert(`Livro "${this.book.title}" reservado com sucesso!`);
+    } catch (error) {
+        console.error('Erro ao reservar livro:', error.response || error);
+
+        // Em caso de falha na reserva, aumenta a quantidade novamente no library-backend
+        try {
+            const increaseResponse = await apiLibrary.increaseBookQuantity(bookId, 1);
+            console.log('Quantidade restaurada após falha:', increaseResponse.data);
+        } catch (restoreError) {
+            console.error('Erro ao restaurar quantidade:', restoreError.response || restoreError);
+        }
+
+        alert('Erro ao reservar o livro. Por favor, tente novamente.');
+    }
+}
+
+
     },
     mounted() {
         console.log('Dados do livro:', this.book);

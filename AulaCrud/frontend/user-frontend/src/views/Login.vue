@@ -33,7 +33,7 @@ export default {
       message: ''
     };
   },
-  methods: {
+  methods: { 
     async loginUser() {
   try {
     const response = await api.post('/auth/login', {
