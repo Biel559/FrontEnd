@@ -13,7 +13,8 @@ const authenticate = require('./middlewares/authenticate'); // Middleware de aut
 // Middleware global para habilitar CORS e JSON
 app.use(cors({
     origin: 'http://localhost:8080', // Permite requisições apenas do seu frontend
-    methods: ['GET', 'POST'], // Adicione outros métodos se necessário
+    methods: ['GET', 'POST', 'PATCH', 'PUT', 'DELETE', 'OPTIONS'], // Adicione outros métodos se necessário
+    allowedHeaders: ['Content-Type', 'Authorization']
 }));
 app.use(express.json()); // Middleware para processar requisições JSON
  

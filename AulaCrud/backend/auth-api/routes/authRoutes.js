@@ -6,75 +6,75 @@ const authController = require('../controllers/authController'); // Controlador 
 const authenticate = require('../middlewares/authenticate'); // Middleware de autenticação
 const mongoose = require('mongoose'); // Importa mongoose para trabalhar com ObjectId
 
-// Rota para registrar novos usuários
+// Route to register new users
 router.post('/register', authController.register);
- 
-// Rota para login de usuários
-router.post('/login', authController.login); 
- 
-// Rota para reservar um livro
-router.post('/reserve', authenticate, async (req, res) => {
-    const { id } = req.user; // Obtém o ID do usuário autenticado
-    const { bookId } = req.body; // ID do livro enviado no corpo da requisição
 
-    console.log(`[LOG] Iniciando reserva. Usuário autenticado: ${id}, Livro: ${bookId}`);
+// Route to log in users
+router.post('/login', authController.login);
+
+// Route to reserve a book
+router.post('/reserve', authenticate, async (req, res) => {
+    const { id } = req.user; // Get the ID of the authenticated user
+    const { bookId } = req.body; // ID of the book sent in the request body
+
+    console.log(`[LOG] Starting reservation. Authenticated user: ${id}, Book: ${bookId}`);
 
     try {
-        // Faz uma chamada ao `library-backend` para buscar o título do livro
+        // Make a call to `library-backend` to get the book title
         const libraryBackendURL = process.env.LIBRARY_BACKEND_URL || 'http://localhost:3000';
-        console.log(`[LOG] Requisitando livro no library-backend: ${libraryBackendURL}/api/books/${bookId}`);
+        console.log(`[LOG] Requesting book from library-backend: ${libraryBackendURL}/api/books/${bookId}`);
         
         const bookResponse = await axios.get(`${libraryBackendURL}/api/books/${bookId}`);
         const book = bookResponse.data;
 
-        console.log(`[LOG] Livro encontrado no library-backend:`, book);
+        console.log(`[LOG] Book found in library-backend:`, book);
 
         if (!book) {
-            console.log(`[LOG] Livro não encontrado no estoque.`);
-            return res.status(404).json({ error: 'Livro não encontrado no estoque.' });
+            console.log(`[LOG] Book not found in stock.`);
+            return res.status(404).json({ error: 'Book not found in stock.' });
         }
 
-        // Busca o usuário no auth-api
-        console.log(`[LOG] Buscando usuário no banco de dados pelo ID: ${id}`);
+        // Look for the user in the auth-api
+        console.log(`[LOG] Searching for user in the database by ID: ${id}`);
         const user = await User.findById(id);
 
         if (!user) {
-            console.log(`[LOG] Usuário não encontrado.`);
-            return res.status(404).json({ error: 'Usuário não encontrado.' });
+            console.log(`[LOG] User not found.`);
+            return res.status(404).json({ error: 'User not found.' });
         }
 
-        // Verifica se o usuário já reservou 3 livros
-        console.log(`[LOG] Reservas atuais do usuário:`, user.reservations);
+        // Check if the user has already reserved 3 books
+        console.log(`[LOG] User's current reservations:`, user.reservations);
 
         if (user.reservations.length >= user.reservationLimit) {
-            console.log(`[LOG] Usuário atingiu o limite de reservas (${user.reservationLimit}).`);
-            return res.status(400).json({ error: 'Você já atingiu o limite de livros reservados.' });
+            console.log(`[LOG] User has reached the reservation limit (${user.reservationLimit}).`);
+            return res.status(400).json({ error: 'You have reached the limit of reserved books.' });
         }
 
-        // Adiciona o título do livro à lista de reservas do usuário
+        // Add the book title to the user's reservations list
         user.reservations.push({ bookId: bookId, reservedAt: new Date() });
         await user.save();
 
-        console.log(`[LOG] Reserva salva com sucesso. Reservas atualizadas:`, user.reservations);
+        console.log(`[LOG] Reservation saved successfully. Updated reservations:`, user.reservations);
 
-        // Retorna uma mensagem de sucesso e a lista de reservas
+        // Return a success message and the list of reservations
         res.status(200).json({
-            message: 'Livro reservado com sucesso!',
+            message: 'Book reserved successfully!',
             reservations: user.reservations
         });
     } catch (error) {
-        console.error(`[ERROR] Erro ao reservar livro:`, error.message);
+        console.error(`[ERROR] Error reserving book:`, error.message);
 
         if (error.response) {
-            // Erro vindo do library-backend
-            console.error(`[ERROR] Detalhes do erro no library-backend:`, error.response.data);
+            // Error from library-backend
+            console.error(`[ERROR] Error details from library-backend:`, error.response.data);
             return res.status(error.response.status).json({
-                error: 'Erro ao buscar o livro no library-backend.',
+                error: 'Error fetching the book from library-backend.',
                 details: error.response.data
             });
         }
 
-        res.status(500).json({ error: 'Erro ao reservar livro.', details: error.message });
+        res.status(500).json({ error: 'Error reserving book.', details: error.message });
     }
 });
 
@@ -84,24 +84,24 @@ router.patch('/users/:id/toggle-active', authenticate, async (req, res) => {
         const user = await User.findById(id);
 
         if (!user) {
-            return res.status(404).json({ error: 'Usuário não encontrado' });
+            return res.status(404).json({ error: 'User not found.' });
         }
 
         user.isActive = !user.isActive;
         await user.save({ validateBeforeSave: false });
 
-        res.status(200).json({ message: `Usuário ${user.isActive ? 'ativado' : 'desativado'} com sucesso.`, isActive: user.isActive });
+        res.status(200).json({ message: `User ${user.isActive ? 'activated' : 'deactivated'} successfully.`, isActive: user.isActive });
     } catch (error) {
-        res.status(500).json({ error: 'Erro ao alterar estado do usuário.', details: error.message });
+        res.status(500).json({ error: 'Error changing user status.', details: error.message });
     }
 });
 
 router.get('/users', authenticate, async (req, res) => {
     try {
-        const users = await User.find().select('-password'); // Exclui o campo de senha
+        const users = await User.find().select('-password'); // Excludes the password field
         res.status(200).json(users);
     } catch (error) {
-        res.status(500).json({ error: 'Erro ao buscar usuários.', details: error.message });
+        res.status(500).json({ error: 'Error fetching users.', details: error.message });
     }
 });
 
@@ -109,44 +109,91 @@ router.delete('/users/:userId/reservations/:bookId', authenticate, async (req, r
     const { userId, bookId } = req.params;
 
     try {
-        // Imprime o tipo de userId e bookId para verificar se estão chegando corretamente
+        // Print the types of userId and bookId to check if they're coming correctly
         console.log('userId (type):', typeof userId, 'userId (value):', userId);
         console.log('bookId (type):', typeof bookId, 'bookId (value):', bookId);
 
-        // Busca o usuário no banco de dados
+        // Find the user in the database
         const user = await User.findById(userId);
 
         if (!user) {
-            return res.status(404).json({ error: 'Usuário não encontrado.' });
+            return res.status(404).json({ error: 'User not found.' });
         }
 
-        // Converte o bookId para ObjectId corretamente com 'new'
+        // Correctly convert the bookId to ObjectId using 'new'
         const bookObjectId = new mongoose.Types.ObjectId(bookId);
 
-        // Imprime os tipos de dados para verificar a conversão correta
+        // Print the types to verify the conversion
         console.log('bookObjectId (type):', typeof bookObjectId, 'bookObjectId (value):', bookObjectId);
 
-        // Encontra o índice da reserva que queremos remover, considerando o ObjectId
+        // Find the index of the reservation we want to remove, considering ObjectId
         const reservationIndex = user.reservations.findIndex(reservation => {
             console.log('reservation.bookId (type):', typeof reservation.bookId, 'reservation.bookId (value):', reservation.bookId);
-            return reservation.bookId.toString() === bookObjectId.toString(); // Comparação de ObjectId
+            return reservation.bookId.toString() === bookObjectId.toString(); // ObjectId comparison
         });
 
-        // Se a reserva não for encontrada, retornamos erro
+        // If the reservation is not found, return error
         if (reservationIndex === -1) {
-            return res.status(404).json({ error: 'Reserva não encontrada para o usuário.' });
+            return res.status(404).json({ error: 'Reservation not found for the user.' });
         }
 
-        // Remove a reserva do array
+        // Remove the reservation from the array
         user.reservations.splice(reservationIndex, 1);
 
-        // Salva as alterações no banco de dados
+        // Save the changes to the database
         await user.save();
 
-        // Retorna sucesso com a lista de reservas atualizada
-        res.status(200).json({ message: 'Reserva removida com sucesso.', reservations: user.reservations });
+        // Return success with the updated list of reservations
+        res.status(200).json({ message: 'Reservation removed successfully.', reservations: user.reservations });
     } catch (error) {
-        res.status(500).json({ error: 'Erro ao remover reserva.', details: error.message });
+        res.status(500).json({ error: 'Error removing reservation.', details: error.message });
+    }
+});
+
+// Route to update user information
+router.put('/users/:id', authenticate, async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { username, course, semester, matriculationId } = req.body; // Campos para atualizar
+
+        // Encontrar o usuário
+        const user = await User.findById(id);
+
+        if (!user) {
+            return res.status(404).json({ error: 'User not found.' });
+        }
+
+        // Atualizar os dados do usuário
+        if (username) user.username = username;
+        if (course) user.course = course;
+        if (semester) user.semester = semester;
+        if (matriculationId) user.matriculationId = matriculationId;
+
+        // Salvar as alterações
+        await user.save();
+
+        res.status(200).json({ message: 'User updated successfully.', user });
+    } catch (error) {
+        res.status(500).json({ error: 'Error updating user.', details: error.message });
+    }
+});
+
+// Route to get a user by ID
+router.get('/users/:id', authenticate, async (req, res) => {
+    try {
+        const { id } = req.params;  // Pega o ID do usuário da URL
+
+        // Busca o usuário pelo ID no banco de dados, excluindo o campo de senha
+        const user = await User.findById(id).select('-password');
+
+        if (!user) {
+            return res.status(404).json({ error: 'User not found.' });
+        }
+
+        // Retorna o usuário encontrado
+        res.status(200).json(user);
+    } catch (error) {
+        res.status(500).json({ error: 'Error fetching user.', details: error.message });
     }
 });
  

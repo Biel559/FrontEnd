@@ -49,6 +49,11 @@ exports.login = async (req, res) => {
             return res.status(400).json({ error: 'Usuário não encontrado' }); // Retorna erro
         }
 
+        // Verifica se o usuário está ativo
+        if (!user.isActive) {
+            return res.status(403).json({ error: 'Conta desativada. Entre em contato com a secretaria.' });
+        }
+
         // Compara a senha fornecida com a senha armazenada no banco
         const isMatch = await bcrypt.compare(password, user.password);
 

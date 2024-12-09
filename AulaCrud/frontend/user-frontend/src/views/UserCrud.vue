@@ -1,11 +1,11 @@
 <template>
-  <Navbar />
+  <Navbar @searchUsers="searchUsers" />
   <div id="app">
     <div class="title-container">
       <h1 class="title">Manage Users</h1>
       <img src="../assets/img/userCrudTitle.png" alt="E-Book Icon" class="title-icon" />
     </div>
-    <UserList />
+    <UserList :searchQuery="searchQuery" />
   </div>
 </template>
 
@@ -15,10 +15,19 @@ import UserList from '../components/UserList.vue';
 
 export default {
   name: "UserCrud",
-
   components: {
     Navbar,
     UserList,
+  },
+  data() {
+    return {
+      searchQuery: '',
+    };
+  },
+  methods: {
+    searchUsers(query) {
+      this.searchQuery = query;
+    },
   },
 };
 </script>

@@ -18,7 +18,7 @@
       <button class="form-submit-button" type="submit">Login</button>
       <button class="form-submit-button" type="button" @click="goToCadastro">SignUp</button>
     </form>
-    <p v-if="message">{{ message }}</p> <!-- Mensagem de erro ou sucesso -->
+    <p v-if="message" class="error-message">{{ message }}</p> <!-- Mensagem de erro ou sucesso -->
   </div>
 </template>
 
@@ -30,39 +30,40 @@ export default {
     return {
       username: '',
       password: '',
-      message: ''
+      message: '', // Armazena mensagens de erro ou sucesso
     };
   },
-  methods: { 
+  methods: {
     async loginUser() {
-  try {
-    const response = await api.post('/auth/login', {
-      username: this.username,
-      password: this.password,
-    });
+      try {
+        const response = await api.post('/auth/login', {
+          username: this.username,
+          password: this.password,
+        });
 
-    this.message = 'Login bem-sucedido!';
+        this.message = 'Login bem-sucedido!';
 
-    // Armazena o token, ID do usuário e role no localStorage
-    localStorage.setItem('token', response.data.token);
-    localStorage.setItem('userId', response.data.userId);
-    localStorage.setItem('role', response.data.role); // Armazena a role do usuário
+        // Armazena o token, ID do usuário e role no localStorage
+        localStorage.setItem('token', response.data.token);
+        localStorage.setItem('userId', response.data.userId);
+        localStorage.setItem('role', response.data.role);
 
-    this.$router.push('/home'); // Redireciona para a página inicial
-  } catch (error) {
-    this.message = error.response?.data?.message || 'Erro ao fazer login.';
-  }
-},
-
-
-    // Método para redirecionar para App.vue
-    goToApp() {
-      this.$router.push('/app'); // Redireciona para a nova rota
+        this.$router.push('/home'); // Redireciona para a página inicial
+      } catch (error) {
+        if (error.response?.status === 403) {
+          // Conta desativada
+          this.message = 'Account deactivated. Please contact the office.';
+          alert('Your account has been deactivated. Please contact an administrator or librarian at the school office.');
+        } else {
+          // Outros erros
+          this.message = error.response?.data?.message || 'Erro ao fazer login.';
+        }
+      }
     },
     goToCadastro() {
-      this.$router.push('/cadastro'); // Redireciona para a nova rota
-    }
-  }
+      this.$router.push('/cadastro'); // Redireciona para a rota de cadastro
+    },
+  },
 };
 </script>
 

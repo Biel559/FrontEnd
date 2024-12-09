@@ -5,13 +5,13 @@
     </div>
     <div class="InputContainer">
       <input
-        placeholder="Search for a book..."
+        :placeholder="placeholder"
         id="input"
         class="input"
         name="text"
         type="text"
         v-model="searchQuery"
-        @input="filterBooks"
+        @input="handleSearch"
       />
       <label class="labelforsearch" for="input">
         <svg class="searchIcon" viewBox="0 0 512 512">
@@ -46,6 +46,9 @@ export default {
     isLibrarian() {
       return this.role === 'librarian';
     },
+    placeholder() {
+      return this.$route.name === 'UserCrud' ? 'Search for a user...' : 'Search for a book...';
+    },
   },
   methods: {
     goToHome() {
@@ -63,13 +66,16 @@ export default {
     goToConfig() {
       this.$router.push('/config');
     },
-    filterBooks() {
-      this.$emit('filterBooks', this.searchQuery);
+    handleSearch() {
+      if (this.$route.name === 'UserCrud') {
+        this.$emit('searchUsers', this.searchQuery);
+      } else {
+        this.$emit('filterBooks', this.searchQuery);
+      }
     },
   },
 };
 </script>
-
   
   <style scoped>
 .navbar {
