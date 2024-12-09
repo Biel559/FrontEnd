@@ -1,11 +1,24 @@
 <template>
+  <!-- Estrutura principal da barra de navegação -->
   <nav class="navbar">
+    <!-- Logo do sistema com link para a página inicial -->
     <div class="logo">
       <a href=""><img src="../assets/dashboardImg/logoIllumine.png" alt="Logo" @click="goToHome" /></a>
     </div>
+
+    <!-- Contêiner da barra de pesquisa -->
     <div class="InputContainer">
-      <input :placeholder="placeholder" id="input" class="input" name="text" type="text" v-model="searchQuery"
-        @input="handleSearch" />
+      <!-- Campo de texto para pesquisa -->
+      <input 
+        :placeholder="placeholder" 
+        id="input" 
+        class="input" 
+        name="text" 
+        type="text" 
+        v-model="searchQuery" 
+        @input="handleSearch" 
+      />
+      <!-- Ícone de pesquisa exibido ao lado do input -->
       <label class="labelforsearch" for="input">
         <svg class="searchIcon" viewBox="0 0 512 512">
           <path
@@ -14,75 +27,103 @@
         </svg>
       </label>
     </div>
+
+    <!-- Ícones de navegação -->
     <div class="nav-icons">
-      <a v-if="isLibrarianOrAdmin" href="#userCrud" class="icon"><img src="../assets/dashboardImg/account.png" alt=""
-          @click="goToUserCrud" /></a>
-      <a v-if="isLibrarianOrAdmin" href="#crud" class="icon"><img src="../assets/dashboardImg/crud.png" alt=""
-          @click="goToApp" /></a>
-      <a v-if="isLibrarian" href="#graficos" class="icon"><img src="../assets/dashboardImg/chart.png" alt=""
-          @click="goToChart" /></a>
+      <!-- Botão para acessar o CRUD de usuários (visível apenas para Admin e Librarian) -->
+      <a v-if="isLibrarianOrAdmin" href="#userCrud" class="icon">
+        <img src="../assets/dashboardImg/account.png" alt="" @click="goToUserCrud" />
+      </a>
+
+      <!-- Botão para acessar o CRUD de livros (visível apenas para Admin e Librarian) -->
+      <a v-if="isLibrarianOrAdmin" href="#crud" class="icon">
+        <img src="../assets/dashboardImg/crud.png" alt="" @click="goToApp" />
+      </a>
+
+      <!-- Botão para acessar gráficos (visível apenas para Librarian) -->
+      <a v-if="isLibrarian" href="#graficos" class="icon">
+        <img src="../assets/dashboardImg/chart.png" alt="" @click="goToChart" />
+      </a>
+
+      <!-- Botão para exibir notificações -->
       <a href="#notificacoes" class="icon">
         <img src="../assets/dashboardImg/notification.png" alt="" @click="toggleNotifications" />
       </a>
+
+      <!-- Componente de notificações (aparece quando ativado) -->
       <div v-if="showNotifications">
         <notifications v-show="showNotifications" />
       </div>
 
-      <a href="#configuracoes" class="icon"><img src="../assets/dashboardImg/config.png" alt=""
-          @click="goToConfig" /></a>
+      <!-- Botão para acessar configurações -->
+      <a href="#configuracoes" class="icon">
+        <img src="../assets/dashboardImg/config.png" alt="" @click="goToConfig" />
+      </a>
     </div>
   </nav>
 </template>
 
 <script>
 import Notifications from '@/components/Notifications.vue';
+
 export default {
+  // Importa o componente de notificações
   components: {
     Notifications,
   },
   data() {
     return {
-      searchQuery: '',
-      role: localStorage.getItem('role') || 'student', // Pega a role do usuário
-      showNotifications: false,
+      searchQuery: '', // Armazena a consulta de pesquisa inserida pelo usuário
+      role: localStorage.getItem('role') || 'student', // Recupera a role do usuário do localStorage (padrão: student)
+      showNotifications: false, // Controla a exibição das notificações
     };
   },
   computed: {
+    // Computed property para verificar se o usuário é Librarian ou Admin
     isLibrarianOrAdmin() {
       return this.role === 'librarian' || this.role === 'admin';
     },
+    // Computed property para verificar se o usuário é Librarian
     isLibrarian() {
       return this.role === 'librarian';
     },
+    // Computed property para exibir um placeholder adequado no campo de busca
     placeholder() {
       return this.$route.name === 'UserCrud' ? 'Search for a user...' : 'Search for a book...';
     },
   },
   methods: {
+    // Alterna a exibição das notificações
     toggleNotifications() {
       this.showNotifications = !this.showNotifications;
       console.log("Toggle notifications:", this.showNotifications);
     },
+    // Navega para a página inicial
     goToHome() {
       this.$router.push('/home');
     },
+    // Navega para a página CRUD de livros
     goToApp() {
       this.$router.push('/crud');
     },
+    // Navega para a página de gráficos
     goToChart() {
       this.$router.push('/chart');
     },
+    // Navega para o CRUD de usuários
     goToUserCrud() {
       this.$router.push('/userCrud');
     },
+    // Navega para a página de configurações
     goToConfig() {
       this.$router.push('/config');
     },
+    // Emite eventos com base na pesquisa para filtrar livros ou usuários
     handleSearch() {
       if (this.$route.name === 'UserCrud') {
-        this.$emit('searchUsers', this.searchQuery);
+        this.$emit('searchUsers', this.searchQuery); // Pesquisa usuários
       } else {
-        this.$emit('filterBooks', this.searchQuery);
+        this.$emit('filterBooks', this.searchQuery); // Pesquisa livros
       }
     },
   },

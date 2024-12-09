@@ -1,80 +1,101 @@
 <template>
   <div class="login">
+    <!-- Exibe o logo da biblioteca -->
     <img src="../assets/IllumineLogo.png" alt="Logo da Biblioteca" class="logo" />
+
+    <!-- Botão estilizado que mostra o texto "SignUp" ao passar o mouse -->
     <button class="button login-title-button" data-text="Login">
       <span class="actual-text">&nbsp;SignUp&nbsp;</span>
       <span aria-hidden="true" class="hover-text">&nbsp;SignUp&nbsp;</span>
     </button>
 
+    <!-- Formulário de criação de usuário -->
     <form @submit.prevent="criarUser">
+      <!-- Campo para o nome de usuário -->
       <div class="container">
         <input v-model="username" type="text" name="text" class="input" required />
         <label class="label">Enter your profile name</label>
       </div>
+      <!-- Campo para a senha -->
       <div class="container">
         <input v-model="password" type="password" name="password" class="input" required />
         <label class="label">Create a password</label>
       </div>
+      <!-- Campo para o ID de matrícula -->
       <div class="container">
         <input v-model="matriculationId" type="text" class="input" required />
         <label class="label">Enter your Matriculation ID</label>
       </div>
+      <!-- Campo para o curso -->
       <div class="container">
         <input v-model="course" type="text" class="input" required />
         <label class="label">Enter your Course</label>
       </div>
+      <!-- Campo para o semestre -->
       <div class="container">
         <input v-model="semester" type="text" class="input" required />
         <label class="label">Enter your Semester</label>
       </div>
+      <!-- Botão para voltar à página de login -->
       <button class="form-submit-button" @click="goToLogin" type="button">Back</button>
+      <!-- Botão para criar a conta -->
       <button class="form-submit-button" type="submit">Create Account</button>
     </form>
-    <p v-if="message">{{ message }}</p> <!-- Mensagem de erro ou sucesso -->
+    <!-- Exibe uma mensagem de erro ou sucesso -->
+    <p v-if="message">{{ message }}</p>
   </div>
 </template>
 
 <script>
-import api from "../axios";
+import api from "../axios"; // Importa a instância do Axios para realizar requisições
 
 export default {
   data() {
     return {
+      // Variáveis para armazenar os dados do formulário
       username: "",
       password: "",
       matriculationId: "",
       course: "",
       semester: "",
-      message: ""
+      message: "" // Mensagem de erro ou sucesso
     };
   },
   methods: {
+    // Método para criar um usuário
     async criarUser() {
       try {
+        // Envia os dados para a API de registro
         const response = await api.post("/auth/register", {
           username: this.username,
           password: this.password,
           matriculationId: this.matriculationId,
           course: this.course,
           semester: this.semester,
-          role: "student" // Define a role como Student
+          role: "student" // Define a role como "student"
         });
+        // Atualiza a mensagem para sucesso
         this.message = "Conta criada com sucesso!";
+        // Armazena o token recebido no localStorage
         localStorage.setItem("token", response.data.token);
+        // Redireciona o usuário para a página de login
         this.$router.push("/login");
       } catch (error) {
+        // Atualiza a mensagem com o erro, se houver
         this.message =
           error.response && error.response.data && error.response.data.message
             ? error.response.data.message
             : "Erro ao criar conta.";
       }
     },
+    // Método para redirecionar para a página de login
     goToLogin() {
-      this.$router.push("/login"); // Redireciona para a rota de login
+      this.$router.push("/login");
     }
   }
 };
 </script>
+
   <style scoped>
   @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@400;600&display=swap');
   
