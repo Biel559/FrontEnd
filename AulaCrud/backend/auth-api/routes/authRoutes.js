@@ -196,5 +196,30 @@ router.get('/users/:id', authenticate, async (req, res) => {
         res.status(500).json({ error: 'Error fetching user.', details: error.message });
     }
 });
+
+// Adiciona a rota para atualizar o reservationLimit de todos os usuários
+router.patch('/users/update-reservation-limit', authenticate, async (req, res) => {
+    try {
+        // Verificar se o usuário autenticado é um 'librarian'
+        const userRole = req.user.role; // Garantir que o 'role' esteja no objeto do usuário (assumindo que está)
+        if (userRole !== 'librarian' && userRole !== 'admin') {
+            return res.status(403).json({ error: 'Access denied. Only librarians or admins can modify the reservation limit.' });
+        }
+
+        const { newLimit } = req.body; // A nova quantidade de reservas que será aplicada a todos os usuários
+
+        // Verifica se o newLimit foi passado na requisição
+        if (newLimit === undefined) {
+            return res.status(400).json({ error: 'Please provide a valid reservation limit.' });
+        }
+
+        // Atualiza o reservationLimit de todos os usuários
+        const updatedUsers = await User.updateMany({}, { $set: { reservationLimit: newLimit } });
+
+        res.status(200).json({ message: `${updatedUsers.nModified} users updated successfully.` });
+    } catch (error) {
+        res.status(500).json({ error: 'Error updating reservation limits.', details: error.message });
+    }
+});
  
 module.exports = router;
