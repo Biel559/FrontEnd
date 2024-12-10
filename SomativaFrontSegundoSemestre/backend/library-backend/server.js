@@ -9,7 +9,7 @@ require('dotenv').config(); // Carrega as variáveis de ambiente do arquivo .env
 const app = express();
 
 app.use(cors({
-  origin: 'http://localhost:8080', // Substitua com a URL correta do seu frontend
+  origin: '*', // Substitua com a URL correta do seu frontend
   methods: ['GET', 'POST', 'PUT', 'DELETE'], // Adicione os métodos que você está utilizando
 }));
 
@@ -25,7 +25,7 @@ mongoose
     "mongodb+srv://biel559cr:gV0qyQD3WvOCWNmJ@clustergabriel559.b0eqt.mongodb.net/library",
     {
       useNewUrlParser: true,
-      useUnifiedTopology: true,
+      useUnifiedTopology: true, 
     }
   )
   .then(() => console.log("MongoDB conectado"))
@@ -38,6 +38,5 @@ const booksRoutes = require('./routes/book');
 app.use('/api/books', booksRoutes);
 
 // Definir a porta do servidor
-app.listen(3000, () => {
-  console.log("Servidor rodando na porta 3000");
-});
+const PORT = process.env.PORT || 3000; // Use a porta atribuída pelo Render
+app.listen(PORT, () => console.log(`Servidor rodando na porta ${PORT}`));

@@ -12,7 +12,7 @@ const authenticate = require('./middlewares/authenticate'); // Middleware de aut
  
 // Middleware global para habilitar CORS e JSON
 app.use(cors({
-    origin: 'http://localhost:8080', // Permite requisições apenas do seu frontend
+    origin: '*', // Permite requisições apenas do seu frontend
     methods: ['GET', 'POST', 'PATCH', 'PUT', 'DELETE', 'OPTIONS'], // Adicione outros métodos se necessário
     allowedHeaders: ['Content-Type', 'Authorization']
 }));
@@ -25,7 +25,7 @@ app.use('/api/auth', authRoutes);
 app.get('/api/protected', authenticate, authorizeRoles('librarian'), (req, res) => {
     res.json({ message: "Bem-vindo ao dashboard" });
 });
- 
+  
 // Conecta ao banco de dados MongoDB
 mongoose.connect(process.env.MONGO_URI, {
     useNewUrlParser: true,
@@ -35,5 +35,5 @@ mongoose.connect(process.env.MONGO_URI, {
     .catch((error) => console.error('Erro ao conectar ao MongoDB:', error));
  
 // Inicializa o servidor
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5000; // Use a porta atribuída pelo Render
 app.listen(PORT, () => console.log(`Servidor rodando na porta ${PORT}`));
