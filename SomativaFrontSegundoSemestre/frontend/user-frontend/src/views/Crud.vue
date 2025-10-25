@@ -1,6 +1,6 @@
 <template>
   <div id="app">
-    <Navbar/>
+    <Navbar @filterBooks="updateSearchQuery"/>
     <div class="main-content">
       <div class="title-container">
         <h1 class="title">Add Books</h1>
@@ -11,7 +11,6 @@
     <BookList :searchQuery="searchQuery" @edit-book="setBookToEdit" ref="bookList" />
   </div>
 </template>
-
 <script>
 import BookList from '../components/BookList.vue';
 import BookForm from '../components/BookForm.vue';
@@ -21,7 +20,7 @@ export default {
   data() {
     return {
       bookToEdit: null,
-      searchQuery: '', // Adiciona o estado para a consulta de pesquisa
+      searchQuery: '', // Estado para a consulta de pesquisa
     };
   },
   components: {
@@ -31,11 +30,15 @@ export default {
   },
   methods: {
     setBookToEdit(book) {
-      this.bookToEdit = { ...book }; // Garante que o objeto seja passado por cópia
+      this.bookToEdit = { ...book };
     },
     fetchBooks() {
       this.$refs.bookList.fetchBooks();
       this.bookToEdit = null;
+    },
+    // Novo método para atualizar a pesquisa
+    updateSearchQuery(query) {
+      this.searchQuery = query;
     },
   },
   mounted() {
