@@ -5,7 +5,7 @@
       <!-- Itera sobre os livros filtrados e exibe cada item -->
       <li v-for="book in filteredBooks" :key="book._id" class="book-item">
         <!-- Exibe a imagem do livro se estiver disponível -->
-        <img :src="book.image ? `http://localhost:3000${book.image}` : ''" alt="Capa do livro" v-if="book.image" />
+        <img :src="book.image || ''" alt="Capa do livro" v-if="book.image" />
         
         <!-- Exibe as informações do livro -->
         <div class="book-info">
