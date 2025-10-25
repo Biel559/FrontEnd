@@ -2,7 +2,7 @@ import axios from 'axios';
 
 // Configuração básica do Axios com variáveis de ambiente
 const api = axios.create({
-  baseURL: process.env.VUE_APP_AUTH_API_URL || 'http://localhost:5000/api',
+  baseURL: process.env.VUE_APP_AUTH_API_URL?.replace('/api/auth', '/api') || 'http://localhost:5000/api',
 });
 
 // Interceptor para adicionar o token JWT em cada requisição, se existir
