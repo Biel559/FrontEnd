@@ -2,9 +2,9 @@
   <div class="card">
     <!-- Exibe a imagem do livro se a propriedade 'image' do objeto 'book' for fornecida -->
     <div class="img">
-      <!-- Usa o baseURL com a imagem do livro e renderiza a imagem se a propriedade 'image' existir -->
+      <!-- Renderiza a imagem diretamente da URL do Cloudinary -->
       <img 
-        :src="book.image ? `${baseURL}${book.image}` : ''"  
+        :src="book.image || ''"  
         alt="Capa do livro" 
         v-if="book.image" 
       />
@@ -33,11 +33,6 @@ export default {
       type: Object,   // Espera um objeto 'book' como prop
       required: true, // A prop 'book' é obrigatória
     },
-  },
-  data() {
-    return {
-      baseURL: 'http://localhost:3000', // URL base do backend para buscar as imagens
-    };
   },
   methods: {
     // Método chamado quando o botão "Borrow/Reserve" é clicado

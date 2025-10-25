@@ -11,7 +11,7 @@
                     <!-- Exibe a imagem do livro -->
                     <div class="book-image">
                         <!-- Mostra a capa do livro se a propriedade "image" estiver disponível -->
-                        <img :src="book.image ? `${baseURL}${book.image}` : ''" alt="Capa do Livro" />
+                        <img :src="book.image || ''" alt="Capa do Livro" />
                     </div>
                     <div class="book-info">
                         <!-- Exibe o título do livro -->
@@ -74,19 +74,18 @@ export default {
         Sidebar, // Componente da barra lateral
         Navbar,  // Componente da barra de navegação
     },
-    data() {
-        return {
-            book: {
-                title: '',
-                author: '',
-                rating: 0, // Inicializa a nota do livro como 0
-                ratings: [], // Lista de avaliações do livro
-            },
-            baseURL: 'http://localhost:3000', // URL base do backend
-            userRating: 0, // Nota que o usuário selecionou
-            hoverRating: 0, // Nota exibida ao passar o mouse
-        };
-    },
+data() {
+    return {
+        book: {
+            title: '',
+            author: '',
+            rating: 0,
+            ratings: [],
+        },
+        userRating: 0,
+        hoverRating: 0,
+    };
+},
     methods: {
         // Busca os detalhes do livro baseado no ID da rota
         async fetchBookDetails() {
