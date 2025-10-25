@@ -1,28 +1,44 @@
-require('dotenv').config(); // Carrega variáveis de ambiente do arquivo .env
+require('dotenv').config();
  
-const express = require('express'); // Importa o Express
-const mongoose = require('mongoose'); // Importa o Mongoose para conectar ao MongoDB
-const cors = require('cors'); // Importa o middleware CORS
-const jwt = require('jsonwebtoken'); // Para autenticação com JWT
+const express = require('express');
+const mongoose = require('mongoose');
+const cors = require('cors');
+const jwt = require('jsonwebtoken');
  
-const app = express(); // Inicializa uma aplicação Express
-const authRoutes = require('./routes/authRoutes'); // Rotas de autenticação
-const authorizeRoles = require('./middlewares/authorizeRoles'); // Middleware de roles
-const authenticate = require('./middlewares/authenticate'); // Middleware de autenticação
+const app = express();
+const authRoutes = require('./routes/authRoutes');
+const authorizeRoles = require('./middlewares/authorizeRoles');
+const authenticate = require('./middlewares/authenticate');
  
 // Middleware global para habilitar CORS e JSON
 app.use(cors({
-    origin: [
-        'http://localhost:8080',
-        'http://localhost:8081',
-        'https://*.vercel.app', // Aceita qualquer subdomínio do Vercel
-        process.env.FRONTEND_URL // URL do frontend em produção
-    ],
+    origin: function (origin, callback) {
+        // Permite requisições sem origin (como apps mobile ou Postman)
+        if (!origin) return callback(null, true);
+        
+        // Lista de origens permitidas
+        const allowedOrigins = [
+            'http://localhost:8080',
+            'http://localhost:8081',
+            'https://front-end-three-dun.vercel.app',
+            process.env.FRONTEND_URL
+        ];
+        
+        // Verifica se a origem é do Vercel (aceita qualquer subdomínio)
+        const isVercel = origin.includes('.vercel.app');
+        
+        if (allowedOrigins.indexOf(origin) !== -1 || isVercel) {
+            callback(null, true);
+        } else {
+            callback(new Error('Not allowed by CORS'));
+        }
+    },
     methods: ['GET', 'POST', 'PATCH', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
     credentials: true
 }));
-app.use(express.json()); // Middleware para processar requisições JSON
+
+app.use(express.json());
 
 // Rota de autenticação
 app.use('/api/auth', authRoutes);

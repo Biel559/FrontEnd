@@ -3,18 +3,33 @@ const mongoose = require('mongoose');
 const cors = require('cors');
 const path = require('path');
 
-require('dotenv').config(); // Carrega as variáveis de ambiente do arquivo .env
+require('dotenv').config();
 
 // Inicialização do app
 const app = express();
 
 app.use(cors({
-  origin: [
-    'http://localhost:8080',
-    'http://localhost:8081',
-    'https://*.vercel.app', // Aceita qualquer subdomínio do Vercel
-    process.env.FRONTEND_URL // URL do frontend em produção
-  ],
+  origin: function (origin, callback) {
+    // Permite requisições sem origin (como apps mobile ou Postman)
+    if (!origin) return callback(null, true);
+    
+    // Lista de origens permitidas
+    const allowedOrigins = [
+      'http://localhost:8080',
+      'http://localhost:8081',
+      'https://front-end-three-dun.vercel.app',
+      process.env.FRONTEND_URL
+    ];
+    
+    // Verifica se a origem é do Vercel (aceita qualquer subdomínio)
+    const isVercel = origin.includes('.vercel.app');
+    
+    if (allowedOrigins.indexOf(origin) !== -1 || isVercel) {
+      callback(null, true);
+    } else {
+      callback(new Error('Not allowed by CORS'));
+    }
+  },
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
   credentials: true
