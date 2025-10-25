@@ -1,8 +1,15 @@
-import axios from 'axios'; // Importa Axios para requisições HTTP
+import axios from 'axios';
  
 // URLs base da API - usa variáveis de ambiente em produção
 const BASE_URL = process.env.VUE_APP_LIBRARY_API_URL || 'http://localhost:3000/api/books';
 const AUTH_URL = process.env.VUE_APP_AUTH_API_URL || 'http://localhost:5000/api/auth';
+
+// ✅ ADICIONE ESSAS LINHAS PARA DEBUG
+console.log('🔍 Variáveis de ambiente carregadas:');
+console.log('BASE_URL:', BASE_URL);
+console.log('AUTH_URL:', AUTH_URL);
+console.log('process.env.VUE_APP_LIBRARY_API_URL:', process.env.VUE_APP_LIBRARY_API_URL);
+console.log('process.env.VUE_APP_AUTH_API_URL:', process.env.VUE_APP_AUTH_API_URL);
 
 // Funções CRUD usando Axios
 export default {
@@ -15,7 +22,7 @@ export default {
   addBook(book) {
     return axios.post(BASE_URL, book, {
       headers: {
-        'Content-Type': 'multipart/form-data', // Permite envio de arquivos
+        'Content-Type': 'multipart/form-data',
       },
     });
   },
@@ -24,7 +31,7 @@ export default {
   updateBook(id, book) {
     return axios.put(`${BASE_URL}/${id}`, book, {
       headers: {
-        'Content-Type': 'multipart/form-data', // Permite envio de arquivos
+        'Content-Type': 'multipart/form-data',
       },
     });
   },
@@ -46,11 +53,11 @@ export default {
 
   // PUT: Avaliar um livro
   rateBook(id, ratingData) {
-    const token = localStorage.getItem('token'); // Pega o token armazenado no localStorage
+    const token = localStorage.getItem('token');
   
     return axios.put(`${BASE_URL}/${id}/rate`, ratingData, {
       headers: {
-        'Authorization': `Bearer ${token}`, // Envia o token no cabeçalho
+        'Authorization': `Bearer ${token}`,
       },
     });
   },  
@@ -65,8 +72,9 @@ export default {
     return axios.get(`${BASE_URL}/charts-data`);
   },
 
-  // Funções de autenticação (caso precise)
+  // Funções de autenticação
   login(credentials) {
+    console.log('🔐 Tentando fazer login em:', AUTH_URL); // ← ADICIONE ISSO
     return axios.post(`${AUTH_URL}/login`, credentials);
   },
 
