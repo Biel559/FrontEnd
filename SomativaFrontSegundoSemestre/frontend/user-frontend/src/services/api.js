@@ -1,7 +1,8 @@
 import axios from 'axios'; // Importa Axios para requisições HTTP
  
-// URL base da API
-const BASE_URL = 'http://localhost:3000/api/books';
+// URLs base da API - usa variáveis de ambiente em produção
+const BASE_URL = process.env.VUE_APP_LIBRARY_API_URL || 'http://localhost:3000/api/books';
+const AUTH_URL = process.env.VUE_APP_AUTH_API_URL || 'http://localhost:5000/api/auth';
 
 // Funções CRUD usando Axios
 export default {
@@ -62,5 +63,14 @@ export default {
   // GET: Obter dados para os gráficos
   getChartData() {
     return axios.get(`${BASE_URL}/charts-data`);
+  },
+
+  // Funções de autenticação (caso precise)
+  login(credentials) {
+    return axios.post(`${AUTH_URL}/login`, credentials);
+  },
+
+  register(userData) {
+    return axios.post(`${AUTH_URL}/register`, userData);
   },
 };

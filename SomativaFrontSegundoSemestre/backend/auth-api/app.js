@@ -12,12 +12,18 @@ const authenticate = require('./middlewares/authenticate'); // Middleware de aut
  
 // Middleware global para habilitar CORS e JSON
 app.use(cors({
-    origin: '*', // Permite requisições apenas do seu frontend
-    methods: ['GET', 'POST', 'PATCH', 'PUT', 'DELETE', 'OPTIONS'], // Adicione outros métodos se necessário
-    allowedHeaders: ['Content-Type', 'Authorization']
+    origin: [
+        'http://localhost:8080',
+        'http://localhost:8081',
+        'https://*.vercel.app', // Aceita qualquer subdomínio do Vercel
+        process.env.FRONTEND_URL // URL do frontend em produção
+    ],
+    methods: ['GET', 'POST', 'PATCH', 'PUT', 'DELETE', 'OPTIONS'],
+    allowedHeaders: ['Content-Type', 'Authorization'],
+    credentials: true
 }));
 app.use(express.json()); // Middleware para processar requisições JSON
-// comentário
+
 // Rota de autenticação
 app.use('/api/auth', authRoutes);
  
@@ -35,5 +41,5 @@ mongoose.connect(process.env.MONGO_URI, {
     .catch((error) => console.error('Erro ao conectar ao MongoDB:', error));
  
 // Inicializa o servidor
-const PORT = process.env.PORT || 5000; // Use a porta atribuída pelo Render
+const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => console.log(`Servidor rodando na porta ${PORT}`));

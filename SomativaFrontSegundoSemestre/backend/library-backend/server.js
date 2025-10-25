@@ -9,8 +9,15 @@ require('dotenv').config(); // Carrega as variáveis de ambiente do arquivo .env
 const app = express();
 
 app.use(cors({
-  origin: '*', // Substitua com a URL correta do seu frontend
-  methods: ['GET', 'POST', 'PUT', 'DELETE'], // Adicione os métodos que você está utilizando
+  origin: [
+    'http://localhost:8080',
+    'http://localhost:8081',
+    'https://*.vercel.app', // Aceita qualquer subdomínio do Vercel
+    process.env.FRONTEND_URL // URL do frontend em produção
+  ],
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true
 }));
 
 // Para fazer o parsing do corpo das requisições em JSON
@@ -22,7 +29,7 @@ app.use('/uploads', express.static(path.join(__dirname, 'uploads')));
 // Conexão ao MongoDB
 mongoose
   .connect(
-    "mongodb+srv://biel559cr:gV0qyQD3WvOCWNmJ@clustergabriel559.b0eqt.mongodb.net/library",
+    process.env.MONGO_URI || "mongodb+srv://biel559cr:gV0qyQD3WvOCWNmJ@clustergabriel559.b0eqt.mongodb.net/library",
     {
       useNewUrlParser: true,
       useUnifiedTopology: true, 
@@ -38,5 +45,5 @@ const booksRoutes = require('./routes/book');
 app.use('/api/books', booksRoutes);
 
 // Definir a porta do servidor
-const PORT = process.env.PORT || 3000; // Use a porta atribuída pelo Render
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Servidor rodando na porta ${PORT}`));
