@@ -1,14 +1,14 @@
-require('dotenv').config();
+require('dotenv').config(); // Carrega variáveis de ambiente do arquivo .env
  
-const express = require('express');
-const mongoose = require('mongoose');
-const cors = require('cors');
-const jwt = require('jsonwebtoken');
+const express = require('express'); // Importa o Express
+const mongoose = require('mongoose'); // Importa o Mongoose para conectar ao MongoDB
+const cors = require('cors'); // Importa o middleware CORS
+const jwt = require('jsonwebtoken'); // Para autenticação com JWT
  
-const app = express();
-const authRoutes = require('./routes/authRoutes');
-const authorizeRoles = require('./middlewares/authorizeRoles');
-const authenticate = require('./middlewares/authenticate');
+const app = express(); // Inicializa uma aplicação Express
+const authRoutes = require('./routes/authRoutes'); // Rotas de autenticação
+const authorizeRoles = require('./middlewares/authorizeRoles'); // Middleware de roles
+const authenticate = require('./middlewares/authenticate'); // Middleware de autenticação
  
 // Middleware global para habilitar CORS e JSON
 app.use(cors({
@@ -35,10 +35,15 @@ app.use(cors({
     },
     methods: ['GET', 'POST', 'PATCH', 'PUT', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization'],
-    credentials: true
+    credentials: true,
+    preflightContinue: false,
+    optionsSuccessStatus: 204
 }));
 
-app.use(express.json());
+// Responder explicitamente a requisições OPTIONS
+app.options('*', cors());
+
+app.use(express.json()); // Middleware para processar requisições JSON
 
 // Rota de autenticação
 app.use('/api/auth', authRoutes);

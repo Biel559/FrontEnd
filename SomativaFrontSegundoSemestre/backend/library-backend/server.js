@@ -32,8 +32,13 @@ app.use(cors({
   },
   methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
-  credentials: true
+  credentials: true,
+  preflightContinue: false,
+  optionsSuccessStatus: 204
 }));
+
+// Responder explicitamente a requisições OPTIONS
+app.options('*', cors());
 
 // Para fazer o parsing do corpo das requisições em JSON
 app.use(express.json());
